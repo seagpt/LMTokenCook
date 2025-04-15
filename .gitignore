@@ -1,0 +1,83 @@
+# --- Python Virtual Environments ---
+# Standard virtual environment folders
+venv/
+.venv/
+env/
+ENV/
+
+# --- Python Bytecode and Cache ---
+# Compiled Python files and cache directories
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Python Distribution / Packaging ---
+# Build artifacts, distribution packages, and installer logs
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Log Files ---
+# Application-specific and general log files
+*.log
+logs/
+*.log.*
+
+# --- OS Generated Files ---
+# Common OS-specific metadata/temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDE / Editor Specific Files ---
+# Configuration and temporary files from common editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+*.komodo-workspace Komodo * .kpf
+*~
+*.bak
+*.swp
+*.swo
+
+# --- Testing Artifacts ---
+# Common outputs from testing frameworks and coverage tools
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+nosetests.xml
+pytestdebug.log
+junit*.xml
+
+# --- Secrets ---
+# Local secrets files (NEVER commit actual secrets)
+# Ensure .env.example IS committed if used
+.env*
+!.env.example
+secrets.yaml
+secrets.yml
+*.credential
+*.key
+
+# --- Application Specific ---
+# Add any other project-specific files/folders to ignore below
+# e.g., large data files, temporary output directories not meant for commit
+.bootstrap_cache

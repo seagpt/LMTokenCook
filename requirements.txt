@@ -1,0 +1,6 @@
+customtkinter
+Pillow
+tiktoken
+tkinterdnd2
+python-docx
+pypdf
