@@ -14,9 +14,13 @@
 
 ### Overview 📖
 
-LMTokenCook is designed as an essential utility for AI power-users aiming to maximize their interactions with web interface–based, large-context-window language models. Modern LLMs often boast enormous context windows (like Google Gemini's 1-2 million tokens) accessible via their APIs, yet their corresponding web interfaces frequently impose much smaller *prompt input limits* (e.g., ~32k-128k for various ChatGPT tiers, ~65k+ for Gemini interfaces).
+LMTokenCook is an AI power-user’s favorite tool to maximize their value with web interface–based, large-context-window language models. The tool compiles your data into a single master text file that begins with a map of the file hierarchy, appends each file’s content (labeled with its full path and token count), and offers to divide your consolidated content into manageable chunks based on the token limit you set.
 
-This practical limitation makes it difficult to provide comprehensive context when working with extensive materials like code repositories, book manuscripts, lengthy transcripts, or detailed research papers directly through the web UI. How do you ensure the AI considers *all* relevant information if you can't paste it in one go?
+Powerful AI models like Gemini offer a 1,000,000-token context window for API users, but web interface subscribers can only submit ~70,000 tokens per prompt. This can make it difficult to provide full context to Gemini if you're working with a book, transcript, or code repository that exceeds the prompt limit. However, thanks to LMTokenCook, you can sequentially copy and paste each chunk into your chosen AI tool based on its limits—saturating the full 1,000,000-token context window and ensuring you get the most out of your subscription.
+
+---
+
+How do you ensure the AI considers *all* relevant information if you can't paste it in one go?
 
 **LMTokenCook bridges this gap.** It systematically processes your local file collections:
 
