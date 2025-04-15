@@ -141,7 +141,7 @@ To get the most out of LMTokenCook, it helps to understand a few concepts about 
     3.  ...continue until the last serving...
     4.  Paste final serving & question: "[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please answer the following: [Your question]" -> Send.
 
-    ![Working Example: Gemini Multi-Servings Upload](assets/working-example.png)
+    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Servings Upload" width="50%" style="display:block;margin:auto;"/>
 *Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
 
 ---
