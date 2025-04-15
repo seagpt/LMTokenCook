@@ -1,233 +1,223 @@
-
 ![LMTokenCook Logo](assets/LMTC_Patch.png)
 
-<h1 align="center">Cook your files into AI-ready servings</h1>
+<h1 align="center">LMTokenCook: Cook Your Files into AI-Ready Servings 🍳</h1>
 <h3 align="center">A tool for AI power-users by Steven Seagondollar, DropShock Digital</h3>
 
 ## 🚀 Download
 
-- [Download for Windows (.exe)](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.exe)
-- [Download for macOS (.dmg)](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg)
+* [**Download for Windows (.exe)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.exe)
+* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg) *(macOS build is the primary focus for initial releases)*
 
-### Overview 🍳
+*(Note: Always download from the official Releases page for the latest, signed versions.)*
 
-LMTokenCook is an AI power-user’s favorite tool to maximize their value with web interface–based, large-context-window language models. The tool compiles your data into a single master text file that begins with a map of the file hierarchy, appends each file’s content (labeled with its full path and token count), and offers to divide your consolidated content into manageable servings based on the token limit you set.
+---
 
-Powerful AI models like Gemini offer a 1,000,000-token context window for API users, but web interface subscribers can only submit ~70,000 tokens per prompt. This can make it difficult to provide full context to Gemini if you're working with a book, transcript, or code repository that exceeds the prompt limit. However, thanks to LMTokenCook, you can sequentially copy and paste each serving into your chosen AI tool based on its limits—saturating the full 1,000,000-token context window and ensuring you get the most out of your subscriptions.
+### Overview 📖
 
-The primary output is optimized, clean plain text (`.txt`) files, ensuring maximum compatibility and efficient token usage.
+LMTokenCook is designed as an essential utility for AI power-users aiming to maximize their interactions with web interface–based, large-context-window language models. Modern LLMs often boast enormous context windows (like Google Gemini's 1-2 million tokens) accessible via their APIs, yet their corresponding web interfaces frequently impose much smaller *prompt input limits* (e.g., ~32k-128k for various ChatGPT tiers, ~65k+ for Gemini interfaces).
 
-<img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="50%" style="display:block;margin:auto;"/>
+This practical limitation makes it difficult to provide comprehensive context when working with extensive materials like code repositories, book manuscripts, lengthy transcripts, or detailed research papers directly through the web UI. How do you ensure the AI considers *all* relevant information if you can't paste it in one go?
+
+**LMTokenCook bridges this gap.** It systematically processes your local file collections:
+
+1.  It scans your selected directory, identifying relevant text-based files while skipping binaries and unnecessary folders.
+2.  It extracts the text content from various supported formats.
+3.  It compiles this content into a single, structured data stream, prepending a file hierarchy map and clearly delineating each file's content with its full path and estimated token count.
+4.  Crucially, it offers to divide this consolidated content into manageable **servings** (`serving_XXX_of_YYY.txt`), precisely sized according to a token limit you specify, perfectly tailored for sequential pasting into your target AI's prompt window.
+
+By feeding these servings one after another, you can effectively saturate the LLM's full context window, ensuring it operates with the complete background information necessary for high-quality, contextually aware responses. This allows you to leverage the full power of your AI subscriptions, even through interfaces with restricted input sizes. The output is clean, token-efficient plain text for maximum compatibility.
+
+<img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="60%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
 
 ---
 
 ### Features ✨
 
-* **Cross-Platform GUI:** Modern, easy-to-use interface built with CustomTkinter, available for macOS and Windows. 💻
-* **Flexible Input:** Select input directories using a familiar file browser or use convenient drag-and-drop. 📁
-* **Configurable Output:** Choose a base directory; LMTokenCook creates a unique, timestamped subfolder for each run's results. 💾
-* **Selective File Processing:** Recursively scans directories, processing files based on an extensible list of text/code/document extensions (e.g., `.txt`, `.md`, `.py`, `.js`, `.css`, `.java`, `.docx`, `.pdf`, `.ipynb`). Automatically skips binary files, symbolic links, and common exclusion folders like `.venv`. 🧐
-* **Robust Text Extraction:** Extracts text from various formats:
-    * Plain Text & Code (numerous extensions supported).
-    * Microsoft Word (`.docx`) via `python-docx` (best-effort).
-    * PDF (`.pdf`) via `pypdf` (best-effort, requires text layer).
-* **Accurate Tokenization:** Uses OpenAI's `tiktoken` library (`cl100k_base` encoding) for reliable token counting, closely matching models like GPT-4 and Gemini. 🪙
-* **Optimized Concatenation:** Efficiently combines text from processed files into a single stream, adding clear file path markers (`=== File Start/End ===`).
-* **Optional Master File:** Keep the full concatenated `masterfile.txt` (named with total token count) or discard it after serving to save disk space.
-* **Intelligent Token-Based Servings:** If total tokens exceed your limit, automatically splits the content into sequentially named `serving_XXX_of_YYY.txt` files. Includes instructional comments in each serving to guide sequential pasting into the LLM. 🔢
-* **Line Numbering Option:** Optionally prepend `NNNN ` to each line for easy referencing within the LLM context. #️⃣
-* **Skip Empty Lines Option:** Optionally remove blank lines to condense content and potentially save tokens. 🧹
-* **Detailed Manifest:** Generates a `manifest.json` for every run, providing full transparency on processed/skipped/errored files, run metadata, character offsets, and token counts. 🧾
-* **Responsive UI:** Background threading ensures the interface remains usable even during large processing tasks, with real-time progress updates. ⏳
-* **Configuration Saving:** Remembers your last output folder and serving size via `config.json` (using `appdirs`). ⚙️
+* **Cross-Platform GUI:** Modern, intuitive interface built with CustomTkinter, featuring a dark theme with yellow accents. Natively supports macOS and Windows. 💻
+* **Flexible Input:** Select input directories or single files using a standard file browser or convenient drag-and-drop. 📁
+* **Organized Output:** Automatically creates a unique, timestamped subfolder within your chosen output directory for each processing run, keeping results clearly separated. 💾
+* **Intelligent File Scanning:** Recursively scans directories, identifying and processing files based on a comprehensive, extensible list of text, code, and document extensions (see `lmtokencook/scanner.py` for the full list, includes `.txt`, `.md`, `.py`, `.js`, `.java`, `.docx`, `.pdf`, `.ipynb`, etc.). Safely skips binary files, archives, media, symbolic links, and common exclusion folders (like `.git`, `.venv`, `node_modules`). 🧐
+* **Robust Text Extraction:** Leverages dedicated libraries for reliable content extraction:
+    * Plain Text & Code (numerous formats).
+    * Microsoft Word (`.docx`) via `python-docx` (best-effort text extraction).
+    * PDF (`.pdf`) via `pypdf` (best-effort extraction, requires a text layer; does not perform OCR on image-only PDFs).
+    * Jupyter Notebooks (`.ipynb`) processed to extract code and markdown cell content.
+* **Accurate Tokenization:** Employs OpenAI's official `tiktoken` library (`cl100k_base` encoding) for token counting and serving size calculations, ensuring high relevance for models like the GPT-4 family and Google Gemini. 🪙
+* **Optimized Concatenation & Formatting:** Efficiently processes and combines text streams. Applies optional formatting *before* writing output. Clearly marks the beginning and end of each file's content within the output stream using `=== File Start: [Full Path] ===` and `=== File End: [Full Path] ===` delimiters.
+* **Optional Master File:** Choose to retain the full concatenated `masterfile.t-XXXXX.txt` (where XXXXX reflects the *final* estimated token count after processing) or automatically discard it if only the servings are needed, saving disk space.
+* **Intelligent Token-Based Servings:** If the total processed token count exceeds your specified limit, the content is automatically divided into sequentially named `serving_XXX_of_YYY.txt` files. Each serving includes instructional comments (`# [LMTokenCook] This is serving X of Y...`) to guide sequential input into the LLM interface. 🔢
+* **Line Numbering Option:** Optionally prepend `NNNN ` (a 4-digit, zero-padded line number and space) to every line of the output content. Useful for citing specific parts of the source material in your prompts. #️⃣
+* **Skip Empty Lines Option:** Optionally remove completely blank lines from the output to create denser, potentially more token-efficient content. 🧹
+* **Detailed Manifest (`manifest.json`):** Every run generates a comprehensive JSON report, providing full transparency and traceability:
+    * **Run Metadata:** Input/output paths, timestamp, processing options selected, final file counts (scanned, processed, skipped, failed), total estimated tokens, serving details.
+    * **Directory Structure:** A nested dictionary mirroring the scanned input, showing the status of each file/folder.
+    * **Processed File Details:** An ordered list for each successfully processed file, including relative/absolute paths, character offsets in the final concatenated stream, character count, *final* estimated token count, extraction status, and encoding used. 🧾
+* **Responsive UI:** Utilizes background threading and a queue system to ensure the GUI remains interactive and responsive during file scanning, extraction, and processing, providing real-time progress updates. ⏳
+* **Configuration Persistence:** Remembers your last-used output folder path and serving size setting in a `config.json` file located in the standard user application configuration directory (via `appdirs`). ⚙️
 
 ---
 
-## 🖼️ Example: Gemini Workflow with Servings
+### 🖼️ Example: Gemini Workflow with Servings
 
-<img src="assets/working-example.png" alt="Gemini Working with Servings" width="50%" style="display:block;margin:auto;"/>
+<img src="assets/working-example.png" alt="Gemini Working with Servings" width="70%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
 
-*Above: Example of sequentially pasting LMTokenCook servings into Gemini for full-context AI work.*
-
----
-
-### ⭐ Understanding LLMs, Tokens, and Windows
-
-To get the most out of LMTokenCook, it helps to understand a few concepts about how Large Language Models work:
-
-* **What are LLMs?** Models like **Google Gemini**, **OpenAI's ChatGPT (GPT-4 family)**, **Anthropic's Claude**, **Mistral AI's models**, and **Meta's LLaMA** are trained on vast amounts of text data to understand and generate human-like language. They power chatbots, content creation tools, code assistants, and much more.
+*Above: An example showing multiple LMTokenCook servings being sequentially pasted into Google Gemini, enabling analysis of content far exceeding the single prompt limit, thereby utilizing more of the available context window.*
 
 ---
 
-## 🛠️ Contributions
+### ⭐ Understanding the AI Playground: Tokens, Context, and Prompts
 
-- **Garrett** – Provided critical technical assistance with the following:
-  - Diagnosed and solved `tiktoken` dependency issues that prevented successful packaging and execution of LMTokenCook on both Windows and macOS.
-  - Improved cross-platform packaging reliability for the EXE and DMG builds.
-  - Offered technical troubleshooting and feedback that led to a smoother user experience and more robust application distribution.
+Maximizing LMTokenCook requires understanding how Large Language Models (LLMs) handle text. Here’s a quick primer:
 
----
+* **What are LLMs?**
+    Think of models like **Google Gemini**, **OpenAI's ChatGPT (GPT-4 family)**, **Anthropic's Claude**, **Mistral AI's models**, and **Meta's LLaMA** as highly advanced pattern-matching and text-generation engines. Trained on massive datasets, they learn the structure, nuances, and information within human language, allowing them to perform tasks like summarization, translation, coding, conversation, and complex reasoning.
 
-## 📚 Supporting Knowledge
+* **🪙 What are Tokens?**
+    LLMs don't process text word-by-word. They break it into **tokens**. A token is the fundamental unit the model "sees." It could be a whole word (`"model"`), a common part of a word (`"token"`, `"iza"`, `"tion"`), a single character (`"a"`), punctuation (`.`), or even whitespace. This **tokenization** process uses specific algorithms (like BPE, WordPiece, SentencePiece). The key takeaway is that model limits and API costs are based on *token counts*, not characters or words. Different languages also tokenize with varying efficiency. LMTokenCook uses OpenAI's `tiktoken` (`cl100k_base`), which aligns well with many current models, making its serving size calculations highly relevant.
 
-* **What are Tokens? 🪙** LLMs don't see words like we do. They break text down into smaller pieces called **tokens**. A token might be a whole word ("apple"), part of a word ("un", "happi", "ness"), a punctuation mark (","), or even just a space. The process is called **tokenization**.
-    * **Why Tokens Matter:** Models have limits based on *tokens*, not words or characters. API usage is often billed per token. Efficient token usage saves cost and processing time. Different languages tokenize differently (e.g., some languages use more tokens per word than English).
-    * **How it Works:** Common methods like Byte Pair Encoding (BPE), WordPiece (used by BERT), or SentencePiece build a vocabulary of tokens. LMTokenCook uses `tiktoken` (specifically `cl100k_base`), which is used by many modern models, ensuring its serving sizes are relevant.
+* **🧠 What is a Context Window?**
+    This is the model's **total working memory**, measured in tokens. It represents the maximum span of text (including your input prompt, preceding conversation turns you provide as history, and sometimes the model's own generated output) that the model can reference *simultaneously* when generating its next response. A larger context window allows for greater coherence over long interactions and analysis of large documents. However, processing larger contexts demands more computational resources, potentially increasing cost and latency. Leading models now offer context windows ranging from 128k up to 1 or 2 million tokens (though availability varies).
 
-* **What is a Context Window? 🧠** This is the model's "memory" – the maximum number of tokens it can consider *at once* when processing your input and generating a response. This includes your prompt, any previous conversation history sent back to the model, and sometimes the generated output itself.
-    * **Importance:** A larger context window allows the model to "remember" more information from earlier in a conversation or a long document, leading to more coherent and contextually relevant responses.
-    * **Trade-offs:** Larger context windows require significantly more computational power and memory, potentially leading to slower responses and higher costs.
+* **✍️ What is a Prompt/Input Limit?**
+    This is often the more immediate practical constraint, especially in web interfaces. It's the **maximum number of tokens you can actually submit** in a *single* prompt or API request. This limit is frequently **much smaller** than the model's total context window. For example, while Gemini 1.5 Pro has a 1-2M token context window, its web interface or standard API tiers might limit a single *input* to tens of thousands of tokens (e.g., ~65k for Flash, higher but often still limited for Pro in practice). These limits exist for performance, cost control, and usability reasons.
+    **LMTokenCook's "Serving Size" should be set based on this Prompt/Input Limit**, leaving sufficient headroom for your own instructions and the model's response. LMTokenCook helps you overcome this limit by segmenting your large context into manageable servings.
 
-* **What is a Prompt/Input Limit? ✍️** This is often *different* and *smaller* than the total Context Window. It's the practical limit on how many tokens you can actually *send* to the model in a single turn via its web interface or API call.
-    * **Why Limits Exist:** Web interfaces often have smaller prompt limits than APIs to ensure a responsive user experience and manage server load. Even APIs usually limit the input size per request, even if the underlying model *could* handle more context overall.
-    * **Relevance to LMTokenCook:** The **Serving Size** you set in LMTokenCook should be based on the **Prompt/Input Limit** of the specific interface or API you are using, *not* necessarily the model's maximum Context Window. Leave headroom! (e.g., set serving size to 28k for a 32k prompt limit). LMTokenCook helps work around these prompt limits by breaking your large context into manageable servings.
+* **📊 Major Models & Approximate Limits (Early 2025 - *Always verify with official documentation!*):**
 
-* **Major Models & Approximate Limits (Early 2025 - *Always check official docs for current values!*):** 📊
-
-    | Model (Provider)                   | Max Context Window         | Typical Prompt/Input Limit & Details                                                                                                | Max Output Limit         | Web Interface Access                                                                      |
-    | :--------------------------------- | :------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- | :----------------------- | :---------------------------------------------------------------------------------------- |
-    | ChatGPT (GPT-4.1 by OpenAI)      | Up to 1M tokens (API/latest) | Web: ~32k–128k tokens (tier-dependent). API: Tiered, e.g., 128k.                                                                      | ~4k tokens (often 4096)  | chat.openai.com                                                                           |
-    | Google Gemini (inc. 1.5 Pro)     | Up to 2M tokens (1M public)  | ~65k tokens (Flash models). Higher for Pro via specific interfaces (e.g., Google AI Studio).                                         | ~8k tokens (model-dep.)  | Google AI Studio, Vertex AI                                                               |
-    | Anthropic Claude (e.g., 3.5 Sonnet) | 200k+ tokens (model/tier dep.) | Web usage often lower than max. Enterprise/API tiers allow larger inputs, often below full context window for practical use.      | ~4k-8k tokens            | claude.ai                                                                                 |
-    | Mistral NeMo (by Mistral AI)     | 128k tokens                | Interfaces often limit prompts (~8k-32k) due to integration, though model supports up to 128k via API.                               | ~4k tokens               | Third-party (Hugging Face, API, etc.)                                                     |
-    | Meta LLaMA (e.g., LLaMA 3.2)       | 128k tokens                | No official web UI. Limits depend heavily on hosting implementation & resources (community platforms, self-hosted).                 | Implementation-dependent | Community interfaces (Hugging Face, etc.)                                                 |
+    | Model (Provider)                 | Max Context Window        | Typical Prompt/Input Limit & Details                                                                 | Max Output Limit       | Web Interface Access                                                    |
+    | :------------------------------- | :-------------------- | :--------------------------------------------------------------------------------------------------- | :--------------------- | :---------------------------------------------------------------------- |
+    | ChatGPT (GPT-4.1 by OpenAI)    | Up to 1M tokens (API/latest) | Web: ~32k–128k tokens (tier-dependent); API: Tiered, e.g., 128k vs 32k exist.                               | ~4k-32k tokens         | chat.openai.com                                                         |
+    | Google Gemini (inc. 1.5 Pro)        | Up to 2M tokens (1M public)  | ~65k tokens (Flash models). Higher for Pro via specific interfaces (e.g., Google AI Studio).                       | ~8k tokens (model-dep.)  | Google AI Studio, Vertex AI                                             |
+    | Anthropic Claude (e.g., 3.5 Sonnet) | 200k+ tokens (model/tier dep.) | Web usage often lower than max. Enterprise/API tiers allow larger inputs, often below full context window. | ~4k-8k tokens (beta) | claude.ai                                                               |
+    | Mistral NeMo (by Mistral AI)   | 128k tokens                | API/Interfaces often impose lower practical limits (~8k-32k), though model supports up to 128k via API.            | ~4k tokens             | Third-party (Hugging Face, API, etc.)                                   |
+    | Meta LLaMA (e.g., LLaMA 3.2)      | 128k tokens                | No official web UI. Limits depend heavily on hosting implementation & resources (e.g., 4k-16k).         | Implementation-dep.  | Community Interfaces (Hugging Face, etc.), Self-hosted                   |
 
 ---
 
 ### ❗ Mandatory Reading: Understand Before Use
 
-* **Set Serving Size Wisely:** Base your "Serving Size" setting on the **Prompt/Input Limit** of the specific LLM interface you're using (see table above), *not* the maximum context window. Leave plenty of room (e.g., set `28000` for ChatGPT's 32k limit) for your actual questions and the AI's response within the overall context.
-* **Extraction Quality:** Text extraction from PDF and DOCX is complex and may not capture all content perfectly, especially with unusual formatting or image-based documents. Always review the output and check the `manifest.json` for errors.
-* **Token Estimates:** Token counts are estimates via `tiktoken`. Actual tokenization by the target LLM might vary slightly. Servings prioritize keeping lines intact, so a serving might slightly exceed the limit if a single line is very long.
-* **Privacy:** LMTokenCook processes files locally. However, the output servings are intended for pasting into potentially cloud-based LLMs. Be mindful of the sensitivity of your data before processing and uploading it.
+* **Set Serving Size Wisely:** Base your "Serving Size" on the **Prompt/Input Limit** of your target LLM interface (see table above), *not* its max context window. Leave ample headroom (e.g., set `60000` for Gemini's web UI, `28000` for standard ChatGPT) for your instructions and the AI's response.
+* **Extraction Quality:** Text extraction from complex formats (PDF, DOCX) is best-effort and may miss content in images or complex layouts. Review `manifest.json` for errors.
+* **Token Estimates:** Counts are via `tiktoken` (`cl100k_base`). Actual model tokenization might vary slightly. Servings might slightly exceed the limit if a very long line cannot be split.
+* **Privacy & Security:** LMTokenCook runs locally. **Do NOT process sensitive or confidential information** you wouldn't share with the third-party LLM service you intend to paste the servings into. Review the LLM provider's data usage policies.
 
 ---
 
-### Installation 🚀
+### 💾 Installation
 
 * **Prerequisites:**
-    * **Operating System:** Windows 10/11 or macOS (>= 11 Big Sur recommended).
-    * **Disk Space:** Enough free space for the output subdirectory, which can grow as large as the total extracted text.
+    * Operating System: Windows 10/11 or macOS (>= 11 Big Sur recommended).
+    * Disk Space: Sufficient free space for output files.
 * **Steps:**
-    1.  **Download:** Go to the [**Releases Page**](link/to/releases) *(<- Replace with actual link)* on GitHub. Download the package for your OS:
-        * 🍎 **macOS:** `LMTokenCook_vX.Y.Z.dmg`
-        * 🪟 **Windows:** `LMTokenCook_Setup_vX.Y.Z.exe` *(Planned)*
+    1.  **Download:** Get the latest release from the [**GitHub Releases Page**](https://github.com/seagpt/LMTokenCook/releases/latest).
+        * 🍎 **macOS:** Download `LMTokenCook.dmg`.
+        * 🪟 **Windows:** Download `LMTokenCook.exe`.
     2.  **Install:**
-        * **macOS:** Open the `.dmg`. Drag `LMTokenCook.app` to your Applications folder. On first launch, you may need to bypass Gatekeeper: Right-click the app icon -> select "Open", then confirm in the dialog box.
-        * **Windows:** Run the `.exe` installer and follow the prompts. You might need to bypass Windows SmartScreen: Click "More info", then "Run anyway".
-    3.  **Launch:** Find LMTokenCook in Applications (macOS) or Start Menu/Desktop (Windows).
+        * **macOS:** Open the `.dmg`, drag `LMTokenCook.app` to `/Applications`. On first run, you may need to Right-click -> "Open" -> Confirm in the security dialog.
+        * **Windows:** Run the `.exe` installer. Bypass SmartScreen if prompted ("More info" -> "Run anyway").
+    3.  **Launch:** Run LMTokenCook from Applications (macOS) or Start Menu/Desktop (Windows).
 
 ---
 
-### Usage Guide 📖
+### 📖 Usage Guide
 
-1.  **Launch LMTokenCook:** You'll see the logo and motto.
-2.  **Select Input:** Click "Browse..." for "Input Folder" or drag-and-drop your target folder onto the entry field.
-3.  **Select Output Location:** Click "Browse..." for "Output Folder" to pick a *base* directory. A new timestamped subdirectory for this run's results will be created inside it.
-4.  **Configure Serving Size:** Enter your desired *maximum* tokens per serving (refer to the limits). Leave blank/0 for no serving (outputs only `masterfile.txt`).
-5.  **Set Options:** Use the checkboxes:
-    * `Keep masterfile.txt`: Saves the full concatenated text alongside servings.
-    * `Add line numbers`: Prepends `NNNN ` to each line.
-    * `Skip empty lines`: Removes blank lines.
-6.  **Start Processing:** Click "Start Processing".
-7.  **Monitor:** Watch the Status Log for detailed progress (scanning, file processing, token counts, serving) and the Progress Bar for overall status. Use "Cancel" if needed.
-8.  **Completion:** Wait for "[SUCCESS] Processing complete." in the log. Buttons will reset.
-9.  **Access Results:** Click "Open Output Folder" to view the results in the new subdirectory (contains `manifest.json` and your `.txt` file(s)).
-10. **Feed to LLM:** Copy content from `masterfile.txt` or sequentially from `serving_1_of_N.txt`, `serving_2_of_N.txt`, etc., into your LLM prompts. Use the instructional comments at the start/end of servings to guide the LLM.
+1.  **Launch LMTokenCook.**
+2.  **Select Input:** Use "Browse..." or drag-and-drop your source folder/file.
+3.  **Select Output:** Use "Browse..." to pick a *base* output directory. A timestamped subfolder will be created there.
+4.  **Set Serving Size:** Enter max tokens per serving file (based on LLM prompt limits). 0 or blank = no serving.
+5.  **Choose Options:** Check boxes for keeping the master file, adding line numbers, or skipping empty lines.
+6.  **Click "Start Processing".**
+7.  **Monitor:** Watch the status log and progress bar. Use "Cancel" if needed.
+8.  **Completion:** Wait for the "[SUCCESS]" message.
+9.  **Access Results:** Click "Open Output Folder" to find the `manifest.json` and `.txt` file(s).
+10. **Feed to LLM:** Copy content from `masterfile.txt` or sequentially from `serving_X_of_Y.txt` files into your LLM interface, following the instructional comments within the servings. After loading context, pose your question/task.
 
-    *Example Workflow for Multi-Servings Input:*
-    1.  Paste serving 1: "Here is the first part of the context: [Paste content of serving_1_of_N.txt]" -> Send.
-    2.  Paste serving 2: "Here is the next part: [Paste content of serving_2_of_N.txt]" -> Send.
-    3.  ...continue until the last serving...
-    4.  Paste final serving & question: "[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please answer the following: [Your question]" -> Send.
+    *Example Multi-Serving Input Workflow:*
+    1.  *Prompt 1:* `"Here is the first part of the context: [Paste content of serving_1_of_N.txt]"` -> Send.
+    2.  *Prompt 2:* `"Here is the next part: [Paste content of serving_2_of_N.txt]"` -> Send.
+    3.  *(Repeat...)*
+    4.  *Prompt N+1:* `"[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please [Your actual question or task]."` -> Send.
 
-    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Servings Upload" width="50%" style="display:block;margin:auto;"/>
-*Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
+    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Serving Upload" width="70%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
+    *Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
 
 ---
 
-### Configuration ⚙️
+### ⚙️ Configuration
 
-LMTokenCook automatically saves your last-used settings for convenience:
+LMTokenCook saves your last-used settings automatically:
 
 * **File:** `config.json`
-* **Location:** Your system's standard user application configuration directory (found via `appdirs`).
-    * *Example macOS:* `~/Library/Application Support/LMTokenCook/config.json`
-    * *Example Windows:* `%APPDATA%\LMTokenCook\LMTokenCook\config.json`
-* **Settings Saved:**
-    * `last_output_dir`: The path to the *base* output folder you last selected.
-    * `last_serving_size`: The value last entered for token serving size.
-* **Reset:** If needed, simply delete `config.json`; the app will recreate defaults on next launch.
+* **Location:** Standard user config directory (via `appdirs`).
+    * *macOS:* `~/Library/Application Support/LMTokenCook/`
+    * *Windows:* `%APPDATA%\LMTokenCook\LMTokenCook\`
+    * *Linux:* `~/.config/LMTokenCook/` (if built from source)
+* **Settings:** `last_output_dir`, `last_serving_size`.
+* **Reset:** Delete `config.json` to restore defaults.
 
 ---
 
-### Manifest File (`manifest.json`) 📜
+### 🧾 Manifest File (`manifest.json`)
 
-Each run generates a `manifest.json` in the output folder, providing a detailed record:
+A detailed JSON report is generated for each run, providing transparency:
 
-* **`metadata`:** Summary of the run (paths, timestamp, total file/token counts, serving info, options used).
-* **`directory_structure`:** A nested view of the input folder, showing the status (`processed`, `skipped`, `error`) for each item.
-* **`processed_files`:** An ordered list detailing each successfully processed file:
-    * `relative_path`, `absolute_path`
-    * `char_start_offset`, `char_end_offset`: Positions within the *final* concatenated content stream (after filtering/numbering).
-    * `char_count`: Character length of the *extracted* text.
-    * `estimated_tokens`: Token count estimated by `tiktoken` for the *extracted* text.
-    * `extraction_status`: "Success" or specific error details.
-    * `encoding_used`: Typically 'utf-8'.
+* **`metadata`:** Run summary (paths, timestamp, counts, options, serving info).
+* **`directory_structure`:** Input structure view with processing status per item.
+* **`processed_files`:** List of processed files detailing paths, final character offsets, char/token counts, status, encoding.
 
 ---
 
-### Technical Details 🛠️
+### 🛠️ Technical Details
 
-* **Architecture:** Python GUI application using **CustomTkinter**. File I/O and processing occur in a background **thread** managed via a **`queue.Queue`** to maintain UI responsiveness.
-* **Key Dependencies:** Python 3.8+, `customtkinter`, `Pillow` (for UI assets), `tiktoken` (for tokenization), `tkinterdnd2` (optional, for drag-and-drop), `python-docx` (for .docx extraction), `pypdf` (for .pdf extraction), `appdirs` (for config path). *(See `requirements.txt` for versions).*
-* **DOCX Styles:** The application package includes DOCX style definition files (`styles.xml`, `theme1.xml`, etc.). These originate from standards or the `python-docx` library and define formatting for Word documents, but are *not* applied to LMTokenCook's primary plain text output servings.
-* **Distribution:** Packaged using **PyInstaller**.
-
----
-
-### Troubleshooting ❓
-
-*(Same content as previous README, potentially adding a note about checking manifest token counts if filtering/numbering was used)*
-
-1.  **Error: `ModuleNotFoundError: No module named 'customtkinter'` (or similar)?**
-    * *Cause:* Likely running from source without installing dependencies or activating the virtual environment. This should not happen with the packaged application.
-    * *Solution:* If running from source, ensure your virtual environment is active and you've run `pip install -r requirements.txt`. If using the packaged version, the installation might be corrupted; try reinstalling.
-2.  **Application is Unresponsive ("Not Responding") During Processing?**
-    * *Cause:* Although designed to be responsive, extremely intense I/O or a bug in background processing could potentially cause temporary freezes.
-    * *Solution:* Wait a short while. If it persists, you may need to force quit. Check the terminal log (if launched from console) for errors. Report the issue with details about your input data and system specs via GitHub Issues.
-3.  **PDF or DOCX File Skipped / Text Missing / Error in Log?**
-    * *Cause:* File might be password-protected, image-based (scan), corrupted, or use features the extraction library doesn't support.
-    * *Solution:* Check the `manifest.json` and GUI/terminal logs for specific error messages related to that file. Try opening the file normally. Extraction is best-effort for these types.
-4.  **Token Count / Servingsing Seems Off?**
-    * *Cause:* Token counts are estimates (`tiktoken`). Different models might tokenize slightly differently. Servingsing aims for the *limit* but might slightly exceed it if a single line/word pushes it over. Filtering/line numbering options *will* change the final token count compared to raw extraction.
-    * *Solution:* This is generally expected behavior. The goal is to create manageable servings close to the limit. Ensure your serving size setting allows reasonable headroom for your target LLM. Check the `manifest.json` for token counts *after* processing options were applied if needed.
-5.  **How to Reset Saved Settings?**
-    * *Solution:* Find the `config.json` file (see Configuration section for location) and delete it. The application will create a new one with defaults on the next launch.
-6.  **Drag-and-Drop Doesn't Work?**
-    * *Cause:* The underlying `tkinterdnd2` library might have installation issues or platform incompatibilities, especially when running from source.
-    * *Solution:* Use the "Browse..." button as the primary method for selecting files/folders. If building from source, ensure `tkinterdnd2` is correctly installed for your platform.
+* **Architecture:** Built with Python and the CustomTkinter library for the GUI. Uses background threading (`queue.Queue`) for responsive processing of file I/O, text extraction, tokenization, and writing outputs. The processing pipeline is optimized to handle content modification options efficiently before generating the final output stream(s).
+* **Development Environment:** Developed using standard Python tooling with assistance from AI programming tools like GPT-4.1 integrated into the Windsurf VS Code environment.
+* **Key Dependencies:** Python 3.8+, `customtkinter`, `Pillow`, `tiktoken`, `tkinterdnd2`, `python-docx`, `pypdf`, `appdirs`. *(See `requirements.txt` for specific versions used in development).*
+* **DOCX Styles:** Contains standard DOCX styling files, primarily relevant to the underlying `python-docx` library; these are not applied to the plain text output.
+* **Distribution:** Packaged into standalone applications using PyInstaller.
 
 ---
 
-### License 📄
+### ❓ Troubleshooting
+
+1.  **`ModuleNotFoundError`?** (Source code only) Ensure virtual env is active & `pip install -r requirements.txt`. If packaged, reinstall app.
+2.  **App Unresponsive?** Allow time for heavy I/O. If persistent, force quit & check console logs. Report bugs on GitHub with details.
+3.  **PDF/DOCX Issues?** Check `manifest.json` for errors. May be password-protected, image-only (no OCR), corrupted, or use unsupported formatting. Extraction is best-effort.
+4.  **Token Counts/Serving Size Off?** Counts are `tiktoken` estimates; actual LLM tokenization may differ slightly. Check manifest counts (reflecting options like line numbering/skipping). Servings prioritize line breaks and may slightly exceed limits with extremely long single lines.
+5.  **Reset Settings?** Delete `config.json` (see Configuration).
+6.  **Drag-and-Drop Fails?** Relies on `tkinterdnd2`. Use "Browse..." as the main method. May require extra setup if running from source.
+
+---
+
+### 🤝 Contributing & Support
+
+Contributions, bug reports, and feature suggestions are welcome via the [GitHub Issues](https://github.com/seagpt/LMTokenCook/issues) page for the project.
+
+Special thanks to:
+
+* **Garrett** – For invaluable technical assistance in resolving complex `tiktoken` dependency and packaging challenges across Windows and macOS, significantly improving build reliability and providing crucial troubleshooting support.
+
+---
+
+### 📜 License
 
 Copyright (c) 2025 Steven Seagondollar, DropShock Digital
 
-This project is licensed under the terms of the **MIT License**. See the `LICENSE.md` file for the full text.
+Licensed under the **MIT License**. See the `LICENSE.md` file in the repository for the full text.
 
 ---
 
-### Acknowledgements 🙏
+### 🙏 Acknowledgements
 
-LMTokenCook stands on the shoulders of giants! This application is built with Python and leverages several fantastic open-source libraries that make its functionality possible. We extend our sincere gratitude to the developers and communities behind these projects:
+LMTokenCook leverages the power of the Python ecosystem and several key open-source libraries:
 
-* **Core Language:** [Python](https://www.python.org/)
-* **GUI Framework:** [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter)
-* **Tokenization:** [tiktoken](https://github.com/openai/tiktoken) by OpenAI
-* **PDF Extraction:** [pypdf](https://github.com/py-pdf/pypdf)
-* **DOCX Extraction:** [python-docx](https://github.com/python-openxml/python-docx)
-* **Configuration Directory Handling:** [appdirs](https://github.com/ActiveState/appdirs)
-* **Drag-and-Drop (Optional):** [tkinterdnd2](https://github.com/python-tkdnd/tkdnd/)
-* **Image Handling:** [Pillow](https://python-pillow.org/)
-* **Packaging:** [PyInstaller](https://pyinstaller.org/)
+* [Python](https://www.python.org/)
+* [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter)
+* [tiktoken](https://github.com/openai/tiktoken)
+* [pypdf](https://github.com/py-pdf/pypdf)
+* [python-docx](https://github.com/python-openxml/python-docx)
+* [appdirs](https://github.com/ActiveState/appdirs)
+* [tkinterdnd2](https://github.com/python-tkdnd/tkdnd/)
+* [Pillow](https://python-pillow.org/)
+* [PyInstaller](https://pyinstaller.org/)
+
+---
