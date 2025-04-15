@@ -3,6 +3,11 @@
 
 <h1 align="center">Cook your files into AI-ready servings</h1>
 
+## 🚀 Download
+
+- [Download for Windows (.exe)](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.exe)
+- [Download for macOS (.dmg)](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg)
+
 ### Overview 🍳
 
 LMTokenCook is an AI power-user’s favorite tool to maximize their value with web interface–based, large-context-window language models. The tool compiles your data into a single master text file that begins with a map of the file hierarchy, appends each file’s content (labeled with its full path and token count), and offers to divide your consolidated content into manageable servings based on the token limit you set.
@@ -37,11 +42,32 @@ The primary output is optimized, clean plain text (`.txt`) files, ensuring maxim
 
 ---
 
+## 🖼️ Example: Gemini Workflow with Servings
+
+![Gemini Working with Servings](assets/working-example.png)
+
+*Above: Example of sequentially pasting LMTokenCook servings into Gemini for full-context AI work.*
+
+---
+
 ### ⭐ Understanding LLMs, Tokens, and Windows
 
 To get the most out of LMTokenCook, it helps to understand a few concepts about how Large Language Models work:
 
 * **What are LLMs?** Models like **Google Gemini**, **OpenAI's ChatGPT (GPT-4 family)**, **Anthropic's Claude**, **Mistral AI's models**, and **Meta's LLaMA** are trained on vast amounts of text data to understand and generate human-like language. They power chatbots, content creation tools, code assistants, and much more.
+
+---
+
+## 🛠️ Contributions
+
+- **Garrett** – Provided critical technical assistance with the following:
+  - Diagnosed and solved `tiktoken` dependency issues that prevented successful packaging and execution of LMTokenCook on both Windows and macOS.
+  - Improved cross-platform packaging reliability for the EXE and DMG builds.
+  - Offered technical troubleshooting and feedback that led to a smoother user experience and more robust application distribution.
+
+---
+
+## 📚 Supporting Knowledge
 
 * **What are Tokens? 🪙** LLMs don't see words like we do. They break text down into smaller pieces called **tokens**. A token might be a whole word ("apple"), part of a word ("un", "happi", "ness"), a punctuation mark (","), or even just a space. The process is called **tokenization**.
     * **Why Tokens Matter:** Models have limits based on *tokens*, not words or characters. API usage is often billed per token. Efficient token usage saves cost and processing time. Different languages tokenize differently (e.g., some languages use more tokens per word than English).
