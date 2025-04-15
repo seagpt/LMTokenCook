@@ -1,5 +1,6 @@
+<h1 align="center">Cook your files into AI-ready servings</h1>
+
 ![LMTokenCook Logo](assets/LMTC_Patch.png)
-*Cook your files into perfect AI-ready bites*
 
 ### Overview 🍳
 
@@ -7,7 +8,7 @@ LMTokenCook is a user-friendly, cross-platform GUI application designed to strea
 
 Modern LLMs possess vast knowledge but often have surprisingly small "front doors" – restrictive limits on how much text you can paste into their web interfaces at once. This makes it difficult to provide deep context from your own documents. LMTokenCook, originally conceived by **Steven Seagondollar, Dropshock Digital**, tackles this challenge head-on.
 
-It intelligently scans your selected files, extracts the text content (handling various formats), cleans it up (optionally removing empty lines or adding line numbers), and concatenates everything into a single, well-marked stream. Then, crucially, it "cooks" this stream down into sequentially numbered text file "chunks," each carefully measured using `tiktoken` (the same library used by many popular LLMs) to stay below a token limit *you* define. This allows you to feed extensive context to your LLM piece by piece, ensuring it has the information it needs to understand your request fully.
+It intelligently scans your selected files, extracts the text content (handling various formats), cleans it up (optionally removing empty lines or adding line numbers), and concatenates everything into a single, well-marked stream. Then, crucially, it "cooks" this stream down into sequentially numbered text file "servings," each carefully measured using `tiktoken` (the same library used by many popular LLMs) to stay below a token limit *you* define. This allows you to feed extensive context to your LLM piece by piece, ensuring it has the information it needs to understand your request fully.
 
 The primary output is optimized, clean plain text (`.txt`) files, ensuring maximum compatibility and efficient token usage.
 
@@ -27,13 +28,13 @@ The primary output is optimized, clean plain text (`.txt`) files, ensuring maxim
     * PDF (`.pdf`) via `pypdf` (best-effort, requires text layer).
 * **Accurate Tokenization:** Uses OpenAI's `tiktoken` library (`cl100k_base` encoding) for reliable token counting, closely matching models like GPT-4 and Gemini. 🪙
 * **Optimized Concatenation:** Efficiently combines text from processed files into a single stream, adding clear file path markers (`=== File Start/End ===`).
-* **Optional Master File:** Keep the full concatenated `masterfile.txt` (named with total token count) or discard it after chunking to save disk space.
-* **Intelligent Token-Based Chunking:** If total tokens exceed your limit, automatically splits the content into sequentially named `chunk_XXX_of_YYY.txt` files. Includes instructional comments in each chunk to guide sequential pasting into the LLM. 🔢
+* **Optional Master File:** Keep the full concatenated `masterfile.txt` (named with total token count) or discard it after serving to save disk space.
+* **Intelligent Token-Based Servings:** If total tokens exceed your limit, automatically splits the content into sequentially named `serving_XXX_of_YYY.txt` files. Includes instructional comments in each serving to guide sequential pasting into the LLM. 🔢
 * **Line Numbering Option:** Optionally prepend `NNNN ` to each line for easy referencing within the LLM context. #️⃣
 * **Skip Empty Lines Option:** Optionally remove blank lines to condense content and potentially save tokens. 🧹
 * **Detailed Manifest:** Generates a `manifest.json` for every run, providing full transparency on processed/skipped/errored files, run metadata, character offsets, and token counts. 🧾
 * **Responsive UI:** Background threading ensures the interface remains usable even during large processing tasks, with real-time progress updates. ⏳
-* **Configuration Saving:** Remembers your last output folder and chunk size via `config.json` (using `appdirs`). ⚙️
+* **Configuration Saving:** Remembers your last output folder and serving size via `config.json` (using `appdirs`). ⚙️
 
 ---
 
@@ -45,7 +46,7 @@ To get the most out of LMTokenCook, it helps to understand a few concepts about 
 
 * **What are Tokens? 🪙** LLMs don't see words like we do. They break text down into smaller pieces called **tokens**. A token might be a whole word ("apple"), part of a word ("un", "happi", "ness"), a punctuation mark (","), or even just a space. The process is called **tokenization**.
     * **Why Tokens Matter:** Models have limits based on *tokens*, not words or characters. API usage is often billed per token. Efficient token usage saves cost and processing time. Different languages tokenize differently (e.g., some languages use more tokens per word than English).
-    * **How it Works:** Common methods like Byte Pair Encoding (BPE), WordPiece (used by BERT), or SentencePiece build a vocabulary of tokens. LMTokenCook uses `tiktoken` (specifically `cl100k_base`), which is used by many modern models, ensuring its chunk sizes are relevant.
+    * **How it Works:** Common methods like Byte Pair Encoding (BPE), WordPiece (used by BERT), or SentencePiece build a vocabulary of tokens. LMTokenCook uses `tiktoken` (specifically `cl100k_base`), which is used by many modern models, ensuring its serving sizes are relevant.
 
 * **What is a Context Window? 🧠** This is the model's "memory" – the maximum number of tokens it can consider *at once* when processing your input and generating a response. This includes your prompt, any previous conversation history sent back to the model, and sometimes the generated output itself.
     * **Importance:** A larger context window allows the model to "remember" more information from earlier in a conversation or a long document, leading to more coherent and contextually relevant responses.
@@ -53,7 +54,7 @@ To get the most out of LMTokenCook, it helps to understand a few concepts about 
 
 * **What is a Prompt/Input Limit? ✍️** This is often *different* and *smaller* than the total Context Window. It's the practical limit on how many tokens you can actually *send* to the model in a single turn via its web interface or API call.
     * **Why Limits Exist:** Web interfaces often have smaller prompt limits than APIs to ensure a responsive user experience and manage server load. Even APIs usually limit the input size per request, even if the underlying model *could* handle more context overall.
-    * **Relevance to LMTokenCook:** The **Chunk Size** you set in LMTokenCook should be based on the **Prompt/Input Limit** of the specific interface or API you are using, *not* necessarily the model's maximum Context Window. Leave headroom! (e.g., set chunk size to 28k for a 32k prompt limit). LMTokenCook helps work around these prompt limits by breaking your large context into manageable pieces.
+    * **Relevance to LMTokenCook:** The **Serving Size** you set in LMTokenCook should be based on the **Prompt/Input Limit** of the specific interface or API you are using, *not* necessarily the model's maximum Context Window. Leave headroom! (e.g., set serving size to 28k for a 32k prompt limit). LMTokenCook helps work around these prompt limits by breaking your large context into manageable servings.
 
 * **Major Models & Approximate Limits (Early 2025 - *Always check official docs for current values!*):** 📊
 
@@ -69,10 +70,10 @@ To get the most out of LMTokenCook, it helps to understand a few concepts about 
 
 ### ❗ Mandatory Reading: Understand Before Use
 
-* **Set Chunk Size Wisely:** Base your "Chunk Size" setting on the **Prompt/Input Limit** of the specific LLM interface you're using (see table above), *not* the maximum context window. Leave plenty of room (e.g., set `28000` for ChatGPT's 32k limit) for your actual questions and the AI's response within the overall context.
+* **Set Serving Size Wisely:** Base your "Serving Size" setting on the **Prompt/Input Limit** of the specific LLM interface you're using (see table above), *not* the maximum context window. Leave plenty of room (e.g., set `28000` for ChatGPT's 32k limit) for your actual questions and the AI's response within the overall context.
 * **Extraction Quality:** Text extraction from PDF and DOCX is complex and may not capture all content perfectly, especially with unusual formatting or image-based documents. Always review the output and check the `manifest.json` for errors.
-* **Token Estimates:** Token counts are estimates via `tiktoken`. Actual tokenization by the target LLM might vary slightly. Chunking prioritizes keeping lines intact, so a chunk might slightly exceed the limit if a single line is very long.
-* **Privacy:** LMTokenCook processes files locally. However, the output chunks are intended for pasting into potentially cloud-based LLMs. Be mindful of the sensitivity of your data before processing and uploading it.
+* **Token Estimates:** Token counts are estimates via `tiktoken`. Actual tokenization by the target LLM might vary slightly. Servings prioritize keeping lines intact, so a serving might slightly exceed the limit if a single line is very long.
+* **Privacy:** LMTokenCook processes files locally. However, the output servings are intended for pasting into potentially cloud-based LLMs. Be mindful of the sensitivity of your data before processing and uploading it.
 
 ---
 
@@ -97,25 +98,25 @@ To get the most out of LMTokenCook, it helps to understand a few concepts about 
 1.  **Launch LMTokenCook:** You'll see the logo and motto.
 2.  **Select Input:** Click "Browse..." for "Input Folder" or drag-and-drop your target folder onto the entry field.
 3.  **Select Output Location:** Click "Browse..." for "Output Folder" to pick a *base* directory. A new timestamped subdirectory for this run's results will be created inside it.
-4.  **Configure Chunk Size:** Enter your desired *maximum* tokens per chunk (refer to the limits). Leave blank/0 for no chunking (outputs only `masterfile.txt`).
+4.  **Configure Serving Size:** Enter your desired *maximum* tokens per serving (refer to the limits). Leave blank/0 for no serving (outputs only `masterfile.txt`).
 5.  **Set Options:** Use the checkboxes:
-    * `Keep masterfile.txt`: Saves the full concatenated text alongside chunks.
+    * `Keep masterfile.txt`: Saves the full concatenated text alongside servings.
     * `Add line numbers`: Prepends `NNNN ` to each line.
     * `Skip empty lines`: Removes blank lines.
 6.  **Start Processing:** Click "Start Processing".
-7.  **Monitor:** Watch the Status Log for detailed progress (scanning, file processing, token counts, chunking) and the Progress Bar for overall status. Use "Cancel" if needed.
+7.  **Monitor:** Watch the Status Log for detailed progress (scanning, file processing, token counts, serving) and the Progress Bar for overall status. Use "Cancel" if needed.
 8.  **Completion:** Wait for "[SUCCESS] Processing complete." in the log. Buttons will reset.
 9.  **Access Results:** Click "Open Output Folder" to view the results in the new subdirectory (contains `manifest.json` and your `.txt` file(s)).
-10. **Feed to LLM:** Copy content from `masterfile.txt` or sequentially from `chunk_1_of_N.txt`, `chunk_2_of_N.txt`, etc., into your LLM prompts. Use the instructional comments at the start/end of chunks to guide the LLM.
+10. **Feed to LLM:** Copy content from `masterfile.txt` or sequentially from `serving_1_of_N.txt`, `serving_2_of_N.txt`, etc., into your LLM prompts. Use the instructional comments at the start/end of servings to guide the LLM.
 
-    *Example Workflow for Multi-Chunk Input:*
-    1.  Paste chunk 1: "Here is the first part of the context: [Paste content of chunk_1_of_N.txt]" -> Send.
-    2.  Paste chunk 2: "Here is the next part: [Paste content of chunk_2_of_N.txt]" -> Send.
-    3.  ...continue until the last chunk...
-    4.  Paste final chunk & question: "[Paste content of chunk_N_of_N.txt] Now, based on all the context provided, please answer the following: [Your question]" -> Send.
+    *Example Workflow for Multi-Servings Input:*
+    1.  Paste serving 1: "Here is the first part of the context: [Paste content of serving_1_of_N.txt]" -> Send.
+    2.  Paste serving 2: "Here is the next part: [Paste content of serving_2_of_N.txt]" -> Send.
+    3.  ...continue until the last serving...
+    4.  Paste final serving & question: "[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please answer the following: [Your question]" -> Send.
 
-    ![Working Example: Gemini Multi-Chunk Upload](assets/working-example.png)
-*Above: Gemini successfully receiving and processing multiple LMTokenCook chunk files in sequence.*
+    ![Working Example: Gemini Multi-Servings Upload](assets/working-example.png)
+*Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
 
 ---
 
@@ -129,7 +130,7 @@ LMTokenCook automatically saves your last-used settings for convenience:
     * *Example Windows:* `%APPDATA%\LMTokenCook\LMTokenCook\config.json`
 * **Settings Saved:**
     * `last_output_dir`: The path to the *base* output folder you last selected.
-    * `last_chunk_size`: The value last entered for token chunk size.
+    * `last_serving_size`: The value last entered for token serving size.
 * **Reset:** If needed, simply delete `config.json`; the app will recreate defaults on next launch.
 
 ---
@@ -138,7 +139,7 @@ LMTokenCook automatically saves your last-used settings for convenience:
 
 Each run generates a `manifest.json` in the output folder, providing a detailed record:
 
-* **`metadata`:** Summary of the run (paths, timestamp, total file/token counts, chunking info, options used).
+* **`metadata`:** Summary of the run (paths, timestamp, total file/token counts, serving info, options used).
 * **`directory_structure`:** A nested view of the input folder, showing the status (`processed`, `skipped`, `error`) for each item.
 * **`processed_files`:** An ordered list detailing each successfully processed file:
     * `relative_path`, `absolute_path`
@@ -154,7 +155,7 @@ Each run generates a `manifest.json` in the output folder, providing a detailed 
 
 * **Architecture:** Python GUI application using **CustomTkinter**. File I/O and processing occur in a background **thread** managed via a **`queue.Queue`** to maintain UI responsiveness.
 * **Key Dependencies:** Python 3.8+, `customtkinter`, `Pillow` (for UI assets), `tiktoken` (for tokenization), `tkinterdnd2` (optional, for drag-and-drop), `python-docx` (for .docx extraction), `pypdf` (for .pdf extraction), `appdirs` (for config path). *(See `requirements.txt` for versions).*
-* **DOCX Styles:** The application package includes DOCX style definition files (`styles.xml`, `theme1.xml`, etc.). These originate from standards or the `python-docx` library and define formatting for Word documents, but are *not* applied to LMTokenCook's primary plain text output chunks.
+* **DOCX Styles:** The application package includes DOCX style definition files (`styles.xml`, `theme1.xml`, etc.). These originate from standards or the `python-docx` library and define formatting for Word documents, but are *not* applied to LMTokenCook's primary plain text output servings.
 * **Distribution:** Packaged using **PyInstaller**.
 
 ---
@@ -172,9 +173,9 @@ Each run generates a `manifest.json` in the output folder, providing a detailed 
 3.  **PDF or DOCX File Skipped / Text Missing / Error in Log?**
     * *Cause:* File might be password-protected, image-based (scan), corrupted, or use features the extraction library doesn't support.
     * *Solution:* Check the `manifest.json` and GUI/terminal logs for specific error messages related to that file. Try opening the file normally. Extraction is best-effort for these types.
-4.  **Token Count / Chunking Seems Off?**
-    * *Cause:* Token counts are estimates (`tiktoken`). Different models might tokenize slightly differently. Chunking aims for the *limit* but might slightly exceed it if a single line/word pushes it over. Filtering/line numbering options *will* change the final token count compared to raw extraction.
-    * *Solution:* This is generally expected behavior. The goal is to create manageable chunks close to the limit. Ensure your chunk size setting allows reasonable headroom for your target LLM. Check the `manifest.json` for token counts *after* processing options were applied if needed.
+4.  **Token Count / Servingsing Seems Off?**
+    * *Cause:* Token counts are estimates (`tiktoken`). Different models might tokenize slightly differently. Servingsing aims for the *limit* but might slightly exceed it if a single line/word pushes it over. Filtering/line numbering options *will* change the final token count compared to raw extraction.
+    * *Solution:* This is generally expected behavior. The goal is to create manageable servings close to the limit. Ensure your serving size setting allows reasonable headroom for your target LLM. Check the `manifest.json` for token counts *after* processing options were applied if needed.
 5.  **How to Reset Saved Settings?**
     * *Solution:* Find the `config.json` file (see Configuration section for location) and delete it. The application will create a new one with defaults on the next launch.
 6.  **Drag-and-Drop Doesn't Work?**

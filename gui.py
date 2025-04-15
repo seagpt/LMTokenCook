@@ -87,7 +87,7 @@ class LMTokenCookApp(ctk.CTk):
         # Motto (centered, below logo)
         motto_label = ctk.CTkLabel(
             header,
-            text="Cook your files into perfect AI-ready bites",
+            text="Cook your files into AI-ready servings",
             font=("Arial", 16, "italic"),
             text_color=PALETTE["PRIMARY_YELLOW"],
             bg_color=PALETTE["BG_COLOR"]
@@ -135,7 +135,7 @@ class LMTokenCookApp(ctk.CTk):
         # Chunk size and checkbox row
         chunk_row = ctk.CTkFrame(main_frame, fg_color=PALETTE["BG_COLOR"], bg_color=PALETTE["BG_COLOR"], corner_radius=0)
         chunk_row.pack(fill="x", pady=(2, 4))
-        chunk_label = ctk.CTkLabel(chunk_row, text="Chunk Size (tokens):", font=("Arial", 13, "bold"), text_color=PALETTE["TEXT_COLOR"], bg_color=PALETTE["BG_COLOR"])
+        chunk_label = ctk.CTkLabel(chunk_row, text="Serving Size (tokens):", font=("Arial", 13, "bold"), text_color=PALETTE["TEXT_COLOR"], bg_color=PALETTE["BG_COLOR"])
         chunk_label.pack(side="left", padx=(0, 8))
         self.chunk_entry = ctk.CTkEntry(chunk_row, width=80, fg_color=PALETTE["ACCENT_COLOR"], text_color="#000000")
         self.chunk_entry.insert(0, "28000")
@@ -211,7 +211,7 @@ class LMTokenCookApp(ctk.CTk):
         try:
             chunk_size = int(self.chunk_entry.get().strip())
         except ValueError:
-            self.log_status("[ERROR] Invalid chunk size.")
+            self.log_status("[ERROR] Invalid serving size.")
             return
         if not input_path or not output_path:
             self.log_status("[ERROR] Please select both input and output paths.")

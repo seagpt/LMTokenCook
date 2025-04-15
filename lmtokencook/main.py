@@ -158,7 +158,7 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
     master_content = "\n".join(master_lines)
     total_tokens = len(enc.encode(master_content))
 
-    # Chunking
+    # Servinging
     chunking = {"enabled": False, "threshold": chunk_size, "created": 0}
     if total_tokens > chunk_size:
         if progress_callback:
@@ -169,16 +169,16 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
             with open(master_path, "w", encoding="utf-8") as master_f:
                 for line in master_lines:
                     master_f.write(line + "\n")
-        # Chunk directly from in-memory lines
+        # Serving directly from in-memory lines
         from lmtokencook.chunker import chunk_lines
         num_chunks = chunk_lines(master_lines, output_subdir, chunk_size)
         chunking = {"enabled": True, "threshold": chunk_size, "created": num_chunks}
         if not keep_masterfile:
             if progress_callback:
-                progress_callback(f"Chunked into {num_chunks} files. master_content.txt not written.")
+                progress_callback(f"Servinged into {num_chunks} files. master_content.txt not written.")
         else:
             if progress_callback:
-                progress_callback(f"Chunked into {num_chunks} files. master_content.txt kept.")
+                progress_callback(f"Servinged into {num_chunks} files. master_content.txt kept.")
     else:
         # Only write masterfile.txt if not chunking or keep_masterfile is True
         master_path = output_subdir / f"masterfile.t-{total_tokens}.txt"
@@ -186,7 +186,7 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
             for line in master_lines:
                 master_f.write(line + "\n")
         if progress_callback:
-            progress_callback("Chunking not required.")
+            progress_callback("Servinging not required.")
 
     # Manifest
     metadata = build_manifest_metadata(input_path, output_subdir.name, scan_counts, chunking)
@@ -208,7 +208,7 @@ def main():
     parser = argparse.ArgumentParser(description="LMTokenCook Backend Prototype")
     parser.add_argument("--input", required=True, help="Input file or directory path")
     parser.add_argument("--output", required=True, help="Output directory path")
-    parser.add_argument("--chunk-size", type=int, default=28000, help="Token chunk size threshold")
+    parser.add_argument("--chunk-size", type=int, default=28000, help="Token serving size threshold")
     args = parser.parse_args()
     try:
         run_lmtokencook(args.input, args.output, args.chunk_size, progress_callback=print)

@@ -3,73 +3,73 @@ from typing import List, Dict, Any
 import tiktoken
 
 
-def chunk_lines(
+def serving_lines(
     lines: list,
     output_dir: pathlib.Path,
-    chunk_size: int,
+    serving_size: int,
     encoding_name: str = "cl100k_base"
 ) -> int:
     """
-    Splits a list of lines into chunk_XXX.txt files based on token count.
+    Splits a list of lines into serving_XXX.txt files based on token count.
     Returns the number of chunks created.
     """
     import tiktoken
     enc = tiktoken.get_encoding(encoding_name)
-    chunk_number = 1
-    current_chunk_tokens = 0
-    current_chunk_lines = []
-    chunk_files = []
+    serving_number = 1
+    current_serving_tokens = 0
+    current_serving_lines = []
+    serving_files = []
     # Count how many chunks there will be
-    temp_chunk_tokens = 0
-    temp_chunk_count = 1
+    temp_serving_tokens = 0
+    temp_serving_count = 1
     for line in lines:
         line_tokens = len(enc.encode(line))
-        if temp_chunk_tokens + line_tokens > chunk_size and temp_chunk_tokens > 0:
-            temp_chunk_count += 1
-            temp_chunk_tokens = 0
-        temp_chunk_tokens += line_tokens
-    total_chunks = temp_chunk_count
+        if temp_serving_tokens + line_tokens > serving_size and temp_serving_tokens > 0:
+            temp_serving_count += 1
+            temp_serving_tokens = 0
+        temp_serving_tokens += line_tokens
+    total_chunks = temp_serving_count
     # Actual chunking
-    chunk_number = 1
-    current_chunk_tokens = 0
-    current_chunk_lines = []
+    serving_number = 1
+    current_serving_tokens = 0
+    current_serving_lines = []
     for line in lines:
         line_tokens = len(enc.encode(line))
-        if current_chunk_tokens + line_tokens > chunk_size and current_chunk_tokens > 0:
-            chunk_path = output_dir / f"chunk_{chunk_number}_of_{total_chunks}.txt"
-            with open(chunk_path, "w", encoding="utf-8") as f:
-                if chunk_number < total_chunks:
-                    comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. Do not respond yet, more chunks are coming."
+        if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
+            serving_path = output_dir / f"serving_{serving_number}_of_{total_chunks}.txt"
+            with open(serving_path, "w", encoding="utf-8") as f:
+                if serving_number < total_chunks:
+                    comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. Do not respond yet, more chunks are coming."
                 else:
-                    comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
+                    comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
                 f.write(comment + "\n")
-                for l in current_chunk_lines:
+                for l in current_serving_lines:
                     f.write(l + "\n")
                 f.write(comment + "\n")
-            chunk_files.append(chunk_path)
-            chunk_number += 1
-            current_chunk_lines = []
-            current_chunk_tokens = 0
-        current_chunk_lines.append(line)
-        current_chunk_tokens += line_tokens
-    if current_chunk_lines:
-        chunk_path = output_dir / f"chunk_{chunk_number}_of_{total_chunks}.txt"
-        with open(chunk_path, "w", encoding="utf-8") as f:
-            if chunk_number < total_chunks:
-                comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. Do not respond yet, more chunks are coming."
+            serving_files.append(serving_path)
+            serving_number += 1
+            current_serving_lines = []
+            current_serving_tokens = 0
+        current_serving_lines.append(line)
+        current_serving_tokens += line_tokens
+    if current_serving_lines:
+        serving_path = output_dir / f"serving_{serving_number}_of_{total_chunks}.txt"
+        with open(serving_path, "w", encoding="utf-8") as f:
+            if serving_number < total_chunks:
+                comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. Do not respond yet, more chunks are coming."
             else:
-                comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
+                comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
             f.write(comment + "\n")
-            for l in current_chunk_lines:
+            for l in current_serving_lines:
                 f.write(l + "\n")
             f.write(comment + "\n")
-        chunk_files.append(chunk_path)
-    return len(chunk_files)
+        serving_files.append(serving_path)
+    return len(serving_files)
 
-def chunk_master_text(
+def serving_master_text(
     master_file: pathlib.Path,
     output_dir: pathlib.Path,
-    chunk_size: int,
+    serving_size: int,
     file_metadata: list,
     encoding_name: str = "cl100k_base",
     add_line_numbers: bool = False,
@@ -80,22 +80,22 @@ def chunk_master_text(
     Returns the number of servings created.
     """
     enc = tiktoken.get_encoding(encoding_name)
-    chunk_number = 1
-    current_chunk_tokens = 0
-    current_chunk_lines = []
-    chunk_files = []
-    def write_chunk(chunk_number, lines, total_chunks):
-        chunk_path = output_dir / f"chunk_{chunk_number}_of_{total_chunks}.txt"
-        with open(chunk_path, "w", encoding="utf-8") as f:
-            if chunk_number < total_chunks:
-                comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. Do not respond yet, more chunks are coming."
+    serving_number = 1
+    current_serving_tokens = 0
+    current_serving_lines = []
+    serving_files = []
+    def write_chunk(serving_number, lines, total_chunks):
+        serving_path = output_dir / f"serving_{serving_number}_of_{total_chunks}.txt"
+        with open(serving_path, "w", encoding="utf-8") as f:
+            if serving_number < total_chunks:
+                comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. Do not respond yet, more chunks are coming."
             else:
-                comment = f"# [LMTokenCook] This is chunk {chunk_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
+                comment = f"# [LMTokenCook] This is chunk {serving_number} of {total_chunks}. This is everything. Make an index of all the information you’ve been provided and summarize it. Ask me what I want to do now that we're on the same page thanks to LMTokenCook by DropShock Digital."
             f.write(comment + "\n")
             for l in lines:
                 f.write(l + "\n")
             f.write(comment + "\n")
-        chunk_files.append(chunk_path)
+        serving_files.append(serving_path)
 
     # Read all lines from masterfile (preserve structure, do not filter or renumber)
     with open(master_file, "r", encoding="utf-8") as mf:
@@ -103,32 +103,32 @@ def chunk_master_text(
 
     # Count how many chunks there will be
     enc = tiktoken.get_encoding(encoding_name)
-    temp_chunk_tokens = 0
-    temp_chunk_count = 1
+    temp_serving_tokens = 0
+    temp_serving_count = 1
     for line in file_lines:
         line_tokens = len(enc.encode(line))
-        if temp_chunk_tokens + line_tokens > chunk_size and temp_chunk_tokens > 0:
-            temp_chunk_count += 1
-            temp_chunk_tokens = 0
-        temp_chunk_tokens += line_tokens
-    total_chunks = temp_chunk_count
+        if temp_serving_tokens + line_tokens > serving_size and temp_serving_tokens > 0:
+            temp_serving_count += 1
+            temp_serving_tokens = 0
+        temp_serving_tokens += line_tokens
+    total_chunks = temp_serving_count
 
     # Actual chunking
-    chunk_number = 1
-    current_chunk_tokens = 0
-    current_chunk_lines = []
+    serving_number = 1
+    current_serving_tokens = 0
+    current_serving_lines = []
     for line in file_lines:
         line_tokens = len(enc.encode(line))
-        if current_chunk_tokens + line_tokens > chunk_size and current_chunk_tokens > 0:
-            write_chunk(chunk_number, current_chunk_lines, total_chunks)
-            chunk_number += 1
-            current_chunk_lines = []
-            current_chunk_tokens = 0
-        current_chunk_lines.append(line)
-        current_chunk_tokens += line_tokens
-    if current_chunk_lines:
-        write_chunk(chunk_number, current_chunk_lines, total_chunks)
-    return len(chunk_files)
+        if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
+            write_chunk(serving_number, current_serving_lines, total_chunks)
+            serving_number += 1
+            current_serving_lines = []
+            current_serving_tokens = 0
+        current_serving_lines.append(line)
+        current_serving_tokens += line_tokens
+    if current_serving_lines:
+        write_chunk(serving_number, current_serving_lines, total_chunks)
+    return len(serving_files)
 
     import string
     allowed = set(map(chr, range(32, 127)))
@@ -147,36 +147,36 @@ def chunk_master_text(
             filtered_lines.append(line)
     file_lines = filtered_lines
 
-    # Chunking logic
+    # Servinging logic
     enc = tiktoken.get_encoding(encoding_name)
-    chunk_number = 1
-    current_chunk_tokens = 0
-    current_chunk_lines = []
-    chunk_files = []
+    serving_number = 1
+    current_serving_tokens = 0
+    current_serving_lines = []
+    serving_files = []
     total_chunks = 0
     # First, count how many chunks there will be
-    temp_chunk_tokens = 0
-    temp_chunk_count = 1
+    temp_serving_tokens = 0
+    temp_serving_count = 1
     for line in file_lines:
         line_tokens = len(enc.encode(line))
-        if temp_chunk_tokens + line_tokens > chunk_size and temp_chunk_tokens > 0:
-            temp_chunk_count += 1
-            temp_chunk_tokens = 0
-        temp_chunk_tokens += line_tokens
-    total_chunks = temp_chunk_count
+        if temp_serving_tokens + line_tokens > serving_size and temp_serving_tokens > 0:
+            temp_serving_count += 1
+            temp_serving_tokens = 0
+        temp_serving_tokens += line_tokens
+    total_chunks = temp_serving_count
     # Now do the actual chunking
     for line in file_lines:
         line_tokens = len(enc.encode(line))
-        if current_chunk_tokens + line_tokens > chunk_size and current_chunk_tokens > 0:
-            write_chunk(chunk_number, current_chunk_lines, total_chunks)
-            chunk_number += 1
-            current_chunk_lines = []
-            current_chunk_tokens = 0
-        current_chunk_lines.append(line)
-        current_chunk_tokens += line_tokens
-    if current_chunk_lines:
-        write_chunk(chunk_number, current_chunk_lines, total_chunks)
-    return len(chunk_files)
+        if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
+            write_chunk(serving_number, current_serving_lines, total_chunks)
+            serving_number += 1
+            current_serving_lines = []
+            current_serving_tokens = 0
+        current_serving_lines.append(line)
+        current_serving_tokens += line_tokens
+    if current_serving_lines:
+        write_chunk(serving_number, current_serving_lines, total_chunks)
+    return len(serving_files)
 
     import string
     allowed = set(map(chr, range(32, 127)))
@@ -203,14 +203,14 @@ def chunk_master_text(
         # Split content into lines for token counting
         for line in file_lines:
             line_tokens = len(enc.encode(line))
-            if current_chunk_tokens + line_tokens > chunk_size and current_chunk_tokens > 0:
+            if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
                 # Write current chunk and start new one
-                write_chunk(chunk_number, current_chunk_lines)
-                chunk_number += 1
-                current_chunk_lines = []
-                current_chunk_tokens = 0
-            current_chunk_lines.append(line)
-            current_chunk_tokens += line_tokens
-    if current_chunk_lines:
-        write_chunk(chunk_number, current_chunk_lines)
-    return len(chunk_files)
+                write_chunk(serving_number, current_serving_lines)
+                serving_number += 1
+                current_serving_lines = []
+                current_serving_tokens = 0
+            current_serving_lines.append(line)
+            current_serving_tokens += line_tokens
+    if current_serving_lines:
+        write_chunk(serving_number, current_serving_lines)
+    return len(serving_files)
