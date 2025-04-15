@@ -59,7 +59,7 @@ By feeding these servings one after another, you can effectively saturate the LL
 
 ### 🖼️ Example: Gemini Workflow with Servings
 
-<img src="assets/working-example.png" alt="Gemini Working with Servings" width="70%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
+<img src="assets/working-example.png" alt="Gemini Working with Servings" width="50%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
 
 *Above: An example showing multiple LMTokenCook servings being sequentially pasted into Google Gemini, enabling analysis of content far exceeding the single prompt limit, thereby utilizing more of the available context window.*
 
@@ -138,7 +138,7 @@ Maximizing LMTokenCook requires understanding how Large Language Models (LLMs) h
     3.  *(Repeat...)*
     4.  *Prompt N+1:* `"[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please [Your actual question or task]."` -> Send.
 
-    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Serving Upload" width="70%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
+    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Servings Upload" width="50%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
     *Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
 
 ---
