@@ -2,6 +2,7 @@
 ![LMTokenCook Logo](assets/LMTC_Patch.png)
 
 <h1 align="center">Cook your files into AI-ready servings</h1>
+<h3 align="center">A tool for AI power-users by Steven Seagondollar, DropShock Digital</h3>
 
 ## 🚀 Download
 
