@@ -17,7 +17,7 @@ Powerful AI models like Gemini offer a 1,000,000-token context window for API us
 
 The primary output is optimized, clean plain text (`.txt`) files, ensuring maximum compatibility and efficient token usage.
 
-![LMTokenCook GUI Screenshot](assets/Program_Preview.png)
+<img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="50%" style="display:block;margin:auto;"/>
 
 ---
 
@@ -45,7 +45,7 @@ The primary output is optimized, clean plain text (`.txt`) files, ensuring maxim
 
 ## 🖼️ Example: Gemini Workflow with Servings
 
-![Gemini Working with Servings](assets/working-example.png)
+<img src="assets/working-example.png" alt="Gemini Working with Servings" width="50%" style="display:block;margin:auto;"/>
 
 *Above: Example of sequentially pasting LMTokenCook servings into Gemini for full-context AI work.*
 
