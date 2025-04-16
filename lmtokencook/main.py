@@ -5,7 +5,7 @@ import sys
 from lmtokencook.scanner import scan_directory
 from lmtokencook.extractors import get_extractor, ExtractionError
 from lmtokencook.manifest import build_manifest_metadata, write_manifest
-from lmtokencook.chunker import chunk_master_text
+from lmtokencook.chunker import serving_master_text
 import tiktoken
 import os
 import json
@@ -170,8 +170,8 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
                 for line in master_lines:
                     master_f.write(line + "\n")
         # Serving directly from in-memory lines
-        from lmtokencook.chunker import chunk_lines
-        num_chunks = chunk_lines(master_lines, output_subdir, chunk_size)
+        from lmtokencook.chunker import serving_lines
+        num_chunks = serving_lines(master_lines, output_subdir, chunk_size)
         chunking = {"enabled": True, "threshold": chunk_size, "created": num_chunks}
         if not keep_masterfile:
             if progress_callback:

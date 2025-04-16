@@ -6,28 +6,30 @@
 ## 🚀 Download
 
 * [**Download for Windows (.exe)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.exe)
-* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg) *(coming soon)*
+* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg)
 
 ---
 
 ### Overview 📖
 
-LMTokenCook is an AI power-user’s favorite tool to maximize their value with web interface–based, large-context-window language models. The tool compiles your data into a single master text file that begins with a map of the file hierarchy, appends each file’s content (labeled with its full path and token count), and offers to divide your consolidated content into manageable chunks based on the token limit you set.
+LMTokenCook is an AI power-user’s favorite tool to maximize their value with web interface–based, large-context-window language models. The tool compiles your data into a single master text file that begins with a map of the file hierarchy, appends each file’s content (labeled with its full path and token count), and offers to divide your consolidated content into manageable servings based on the token limit you set.
 
-Powerful AI models like Gemini offer a 1,000,000-token context window for API users, but web interface subscribers can only submit ~70,000 tokens per prompt. This can make it difficult to provide full context to Gemini if you're working with a book, transcript, or code repository that exceeds the prompt limit. However, thanks to LMTokenCook, you can sequentially copy and paste each chunk into your chosen AI tool based on its limits—saturating the full 1,000,000-token context window and ensuring you get the most out of your subscription.
+Powerful AI models like Gemini offer a 1,000,000-token context window for API users, but web interface subscribers can only submit ~70,000 tokens per prompt. This can make it difficult to provide full context to Gemini if you're working with a book, transcript, or code repository that exceeds the prompt limit. However, thanks to LMTokenCook, you can sequentially copy and paste each serving into your chosen AI tool, saturating the full 1,000,000-token context window to get the most out of your subscriptions.
 
 ---
 
 How do you ensure the AI considers *all* relevant information if you can't paste it in one go?
 
-**LMTokenCook bridges this gap.** It systematically processes your local file collections:
+**Context Augmented Generation! (CAG)**
 
-1.  It scans your selected directory, identifying relevant text-based files while skipping binaries and unnecessary folders.
+**LMTokenCook bridges this gap for non-API users.** It systematically processes your local file collections:
+
+1.  It scans your selected directory, identifying relevant text-based files while skipping non-text based files.
 2.  It extracts the text content from various supported formats.
 3.  It compiles this content into a single, structured data stream, prepending a file hierarchy map and clearly delineating each file's content with its full path and estimated token count.
 4.  Crucially, it offers to divide this consolidated content into manageable **servings** (`serving_XXX_of_YYY.txt`), precisely sized according to a token limit you specify, perfectly tailored for sequential pasting into your target AI's prompt window.
 
-By feeding these servings one after another, you can effectively saturate the LLM's full context window, ensuring it operates with the complete background information necessary for high-quality, contextually aware responses. This allows you to leverage the full power of your AI subscriptions, even through interfaces with restricted input sizes. The output is clean, token-efficient plain text for maximum compatibility.
+By feeding these servings one after another, you can effectively saturate the LLM's full context window, ensuring it operates with the complete background information necessary for high-quality, contextually aware responses. This allows you to leverage the full power of your AI subscriptions, even through interfaces that have restricted prompt windows. The output is clean, token-efficient plain text for maximum compatibility and recall.
 
 <img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="60%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
 
@@ -42,13 +44,13 @@ By feeding these servings one after another, you can effectively saturate the LL
 * **Robust Text Extraction:** Leverages dedicated libraries for reliable content extraction:
     * Plain Text & Code (numerous formats).
     * Microsoft Word (`.docx`) via `python-docx` (best-effort text extraction).
-    * PDF (`.pdf`) via `pypdf` (best-effort extraction, requires a text layer; does not perform OCR on image-only PDFs).
+    * PDF (`.pdf`) via `pypdf` (best-effort extraction, requires a text layer; does not perform OCR on image-only PDFs). (*pdf support coming soon*)
     * Jupyter Notebooks (`.ipynb`) processed to extract code and markdown cell content.
 * **Accurate Tokenization:** Employs OpenAI's official `tiktoken` library (`cl100k_base` encoding) for token counting and serving size calculations, ensuring high relevance for models like the GPT-4 family and Google Gemini. 🪙
 * **Optimized Concatenation & Formatting:** Efficiently processes and combines text streams. Applies optional formatting *before* writing output. Clearly marks the beginning and end of each file's content within the output stream using `=== File Start: [Full Path] ===` and `=== File End: [Full Path] ===` delimiters.
 * **Optional Master File:** Choose to retain the full concatenated `masterfile.t-XXXXX.txt` (where XXXXX reflects the *final* estimated token count after processing) or automatically discard it if only the servings are needed, saving disk space.
 * **Intelligent Token-Based Servings:** If the total processed token count exceeds your specified limit, the content is automatically divided into sequentially named `serving_XXX_of_YYY.txt` files. Each serving includes instructional comments (`# [LMTokenCook] This is serving X of Y...`) to guide sequential input into the LLM interface. 🔢
-* **Line Numbering Option:** Optionally prepend `NNNN ` (a 4-digit, zero-padded line number and space) to every line of the output content. Useful for citing specific parts of the source material in your prompts. #️⃣
+* **Line Numbering Option:** Optionally prepend `NNNN ` (a 4-digit, zero-padded line number and space) to every line of the output content. Useful for citing specific parts of the source material in your prompts, for example, code repositories. #️⃣
 * **Skip Empty Lines Option:** Optionally remove completely blank lines from the output to create denser, potentially more token-efficient content. 🧹
 * **Detailed Manifest (`manifest.json`):** Every run generates a comprehensive JSON report, providing full transparency and traceability:
     * **Run Metadata:** Input/output paths, timestamp, processing options selected, final file counts (scanned, processed, skipped, failed), total estimated tokens, serving details.
@@ -81,18 +83,17 @@ Maximizing LMTokenCook requires understanding how Large Language Models (LLMs) h
     This is the model's **total working memory**, measured in tokens. It represents the maximum span of text (including your input prompt, preceding conversation turns you provide as history, and sometimes the model's own generated output) that the model can reference *simultaneously* when generating its next response. A larger context window allows for greater coherence over long interactions and analysis of large documents. However, processing larger contexts demands more computational resources, potentially increasing cost and latency. Leading models now offer context windows ranging from 128k up to 1 or 2 million tokens (though availability varies).
 
 * **✍️ What is a Prompt/Input Limit?**
-    This is often the more immediate practical constraint, especially in web interfaces. It's the **maximum number of tokens you can actually submit** in a *single* prompt or API request. This limit is frequently **much smaller** than the model's total context window. For example, while Gemini 1.5 Pro has a 1-2M token context window, its web interface or standard API tiers might limit a single *input* to tens of thousands of tokens (e.g., ~65k for Flash, higher but often still limited for Pro in practice). These limits exist for performance, cost control, and usability reasons.
+    This is often the more immediate practical constraint, especially in web interfaces. It's the **maximum number of tokens you can actually submit** in a *single* prompt. This limit is frequently **much smaller** than the model's total context window. For example, while Gemini 2.5 Pro has a 1M token context window, its web interface might limit a single *input* to tens of thousands of tokens (e.g., ~65k for 2.5 Pro). These limits exist for performance, cost control, and usability reasons.
     **LMTokenCook's "Serving Size" should be set based on this Prompt/Input Limit**, leaving sufficient headroom for your own instructions and the model's response. LMTokenCook helps you overcome this limit by segmenting your large context into manageable servings.
 
-* **📊 Major Models & Approximate Limits (Early 2025 - *Always verify with official documentation!*):**
+* **📊 Major Models & Approximate Web Interface Limits (April-2025 - *Disclaimer: Limits change! Always verify with the specific platform's official documentation and your subscription tier. These estimates focus on direct text input in web chat interfaces.*):**
 
-    | Model (Provider)                 | Max Context Window        | Typical Prompt/Input Limit & Details                                                                 | Max Output Limit       | Web Interface Access                                                    |
-    | :------------------------------- | :-------------------- | :--------------------------------------------------------------------------------------------------- | :--------------------- | :---------------------------------------------------------------------- |
-    | ChatGPT (GPT-4.1 by OpenAI)    | Up to 1M tokens (API/latest) | Web: ~32k–128k tokens (tier-dependent); API: Tiered, e.g., 128k vs 32k exist.                               | ~4k-32k tokens         | chat.openai.com                                                         |
-    | Google Gemini (inc. 1.5 Pro)        | Up to 2M tokens (1M public)  | ~65k tokens (Flash models). Higher for Pro via specific interfaces (e.g., Google AI Studio).                       | ~8k tokens (model-dep.)  | Google AI Studio, Vertex AI                                             |
-    | Anthropic Claude (e.g., 3.5 Sonnet) | 200k+ tokens (model/tier dep.) | Web usage often lower than max. Enterprise/API tiers allow larger inputs, often below full context window. | ~4k-8k tokens (beta) | claude.ai                                                               |
-    | Mistral NeMo (by Mistral AI)   | 128k tokens                | API/Interfaces often impose lower practical limits (~8k-32k), though model supports up to 128k via API.            | ~4k tokens             | Third-party (Hugging Face, API, etc.)                                   |
-    | Meta LLaMA (e.g., LLaMA 3.2)      | 128k tokens                | No official web UI. Limits depend heavily on hosting implementation & resources (e.g., 4k-16k).         | Implementation-dep.  | Community Interfaces (Hugging Face, etc.), Self-hosted                   |
+| Model Family (Provider)        | Specific Models (Examples)             | Max Context Window (Model Capability) | Typical *Web Interface* Prompt/Input Limit & Details                                                                                                | Max Output Limit (Web UI) | Web Interface Access Points                                           |
+| :----------------------------- | :------------------------------------- | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------ | :-------------------------------------------------------------------- |
+| **OpenAI GPT-4 Series** | GPT-4 Turbo, GPT-4o, GPT-4.1, GPT-4.5 (Preview) | 128k - 1M+ tokens                     | **Highly Tier-Dependent:** Free tier (often GPT-3.5 or limited GPT-4o): ~8k-16k tokens? Paid tiers (Plus/Team using GPT-4/4o/4.5): Often ~32k-128k tokens, but the *usable* single-prompt input can fluctuate and may be less than the model's max context. | ~4k-8k tokens (typical)   | chat.openai.com                                                       |
+| **Google Gemini Series** | Gemini 1.0 Pro, 1.5 Flash, 1.5 Pro, 2.5 Pro (Preview) | 32k - 2M+ tokens                    | **Varies by Interface & Tier:** Basic `gemini.google.com` (often 1.0 Pro or 1.5 Flash): ~16k-64k tokens? Gemini Advanced (1.5/2.5 Pro): ~60k-128k+ tokens text input. Google AI Studio: Often allows larger inputs closer to 1M via specific configurations, but differs from the standard web chat. File uploads can bypass direct text limits but contribute to context. | ~8k tokens (typical)      | gemini.google.com, aistudio.google.com, Google Workspace Integrations |
+| **Anthropic Claude Series** | Claude 3 Haiku, 3 Sonnet, 3 Opus, 3.5 Sonnet | 200k+ tokens                        | **Tier-Dependent:** Free tier: Significantly limited, perhaps ~10k-20k tokens for direct input. Pro tier: Much higher, potentially up to ~150k-200k tokens, especially effective via *file uploads*. Direct text pasting might have lower practical limits. | ~4k tokens (typical)      | claude.ai                                                             |
+| **Mistral AI Series** | Mistral Small, Medium, Large, Mixtral, NeMo | 32k - 128k tokens                     | **Varies Greatly by Platform:** Mistral doesn't have a single dominant public web UI like the others. Limits heavily depend on the third-party host (e.g., Hugging Chat, Perplexity Labs, LlamaParse, etc.) and could range from ~4k to 32k+ tokens. | ~4k-8k tokens             | Primarily via Third-party platforms or specific partner integrations. |
 
 ---
 
@@ -172,7 +173,7 @@ A detailed JSON report is generated for each run, providing transparency:
 ### 🛠️ Technical Details
 
 * **Architecture:** Built with Python and the CustomTkinter library for the GUI. Uses background threading (`queue.Queue`) for responsive processing of file I/O, text extraction, tokenization, and writing outputs. The processing pipeline is optimized to handle content modification options efficiently before generating the final output stream(s).
-* **Development Environment:** Developed using standard Python tooling with assistance from AI programming tools like GPT-4.1 integrated into the Windsurf VS Code environment.
+* **Development Environment:** The project was built using Python directly within the **Windsurf IDE**. Windsurf, being an AI-centric fork of VS Code, facilitated the use of OpenAI models for assistance. Specifically, **GPT-4.1 was utilized for coding and debugging via Windsurf starting on the very day the model was released.**
 * **Key Dependencies:** Python 3.8+, `customtkinter`, `Pillow`, `tiktoken`, `tkinterdnd2`, `python-docx`, `pypdf`, `appdirs`. *(See `requirements.txt` for specific versions used in development).*
 * **DOCX Styles:** Contains standard DOCX styling files, primarily relevant to the underlying `python-docx` library; these are not applied to the plain text output.
 * **Distribution:** Packaged into standalone applications using PyInstaller.
@@ -196,7 +197,7 @@ Contributions, bug reports, and feature suggestions are welcome via the [GitHub 
 
 Special thanks to:
 
-* **Garrett** – For invaluable technical assistance in resolving complex `tiktoken` dependency and packaging challenges across Windows and macOS, significantly improving build reliability and providing crucial troubleshooting support.
+* **Garrett Montagne** – For invaluable technical assistance in resolving complex `tiktoken` dependency and packaging challenges across Windows and macOS, significantly improving build reliability and providing crucial troubleshooting support.
 
 ---
 

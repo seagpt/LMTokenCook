@@ -7,6 +7,12 @@ from PIL import Image
 import os
 import sys
 
+def global_exception_hook(exctype, value, tb):
+    import traceback
+    print("[GLOBAL EXCEPTION]", exctype, value)
+    traceback.print_tb(tb)
+sys.excepthook = global_exception_hook
+
 # DEBUG: Print tiktoken version and location at runtime
 try:
     import tiktoken
@@ -54,6 +60,7 @@ class LMTokenCookApp(ctk.CTk):
         self._build_widgets()
 
     def _build_widgets(self):
+        print("[DEBUG] _build_widgets called")
         # Helper for drag-and-drop support (macOS/Tkinter native)
         def drop(event):
             path = event.data.strip()
@@ -87,7 +94,7 @@ class LMTokenCookApp(ctk.CTk):
         # Motto (centered, below logo)
         motto_label = ctk.CTkLabel(
             header,
-            text="Cook your files into AI-ready servings",
+            text="Cook Your Files Into AI-Ready Servings",
             font=("Arial", 16, "italic"),
             text_color=PALETTE["PRIMARY_YELLOW"],
             bg_color=PALETTE["BG_COLOR"]
@@ -97,7 +104,7 @@ class LMTokenCookApp(ctk.CTk):
         # Byline (centered, below motto)
         byline_label = ctk.CTkLabel(
             header,
-            text="by Steven Seagondollar & DropShock Digital",
+            text="by Steven Seagondollar, DropShock Digital",
             font=("Arial", 12, "italic"),
             text_color=PALETTE["PRIMARY_YELLOW"],
             bg_color=PALETTE["BG_COLOR"]
@@ -175,6 +182,7 @@ class LMTokenCookApp(ctk.CTk):
         buttons_row = ctk.CTkFrame(main_frame, fg_color=PALETTE["BG_COLOR"], bg_color=PALETTE["BG_COLOR"], corner_radius=0)
         buttons_row.pack(fill="x", pady=(4, 8))
         self.start_btn = ctk.CTkButton(buttons_row, text="Start", command=self.start_processing, fg_color=PALETTE["PRIMARY_YELLOW"], text_color="#000000", font=("Arial", 13, "bold"))
+        print("[DEBUG] Start button created")
         self.start_btn.pack(side="left", padx=(0, 10), expand=True, fill="x")
         self.cancel_btn = ctk.CTkButton(buttons_row, text="Cancel", command=self.cancel_processing, fg_color="#FF5555", text_color="#FFFFFF", font=("Arial", 13, "bold"), state="disabled")
         self.cancel_btn.pack(side="left", padx=(0, 10), expand=True, fill="x")
@@ -203,8 +211,10 @@ class LMTokenCookApp(ctk.CTk):
             self.output_entry.insert(0, path)
 
     def start_processing(self):
+        print("[DEBUG] start_processing called")
         input_path = self.input_entry.get().strip()
         output_path = self.output_entry.get().strip()
+        print(f"[DEBUG] input_path='{input_path}' output_path='{output_path}'")
         keep_masterfile = self.keep_master_var.get()
         add_line_numbers = self.add_line_numbers_var.get()
         skip_empty_lines = self.skip_empty_lines_var.get()
@@ -234,6 +244,7 @@ class LMTokenCookApp(ctk.CTk):
         self.after(100, self._process_queue)
 
     def _run_processing(self, input_path, output_path, chunk_size, keep_masterfile, add_line_numbers, skip_empty_lines):
+        print("[DEBUG] Entered _run_processing with:", input_path, output_path, chunk_size, keep_masterfile, add_line_numbers, skip_empty_lines)
         import traceback
         from lmtokencook.main import run_lmtokencook, CancelledError
         try:
@@ -250,6 +261,8 @@ class LMTokenCookApp(ctk.CTk):
                 skip_empty_lines=skip_empty_lines
             )
             self.progress_queue.put(("[SUCCESS] Processing complete.", None, None, result))
+            import tkinter.messagebox as mb
+            mb.showinfo("LMTokenCook", "Processing complete!")
         except FileNotFoundError as e:
             self.progress_queue.put((f"[ERROR] File not found: {e}", None, None, None))
         except PermissionError as e:
@@ -259,6 +272,8 @@ class LMTokenCookApp(ctk.CTk):
         except CancelledError:
             self.progress_queue.put(("[INFO] Processing cancelled by user.", None, None, None))
         except Exception as e:
+            print("[DEBUG] Exception in _run_processing:", e)
+            import traceback; traceback.print_exc()
             # Try to provide ExtractionError details if available
             from lmtokencook.extractors import ExtractionError
             if isinstance(e, ExtractionError):
@@ -328,6 +343,7 @@ class LMTokenCookApp(ctk.CTk):
         self.status_box.configure(state="disabled")
 
     def open_github(self):
+        print("[DEBUG] GitHub button pressed")
         import webbrowser
         webbrowser.open_new_tab("https://github.com/seagpt")
 
