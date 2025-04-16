@@ -5,8 +5,8 @@
 
 ## 🚀 Download
 
-* [**Download for Windows (.exe)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.exe)
-* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/latest/download/LMTokenCook.dmg)
+* [**Download for Windows (.exe)**](https://github.com/seagpt/LMTokenCook/releases/download/exe_v1.0/LMTokenCook.exe)
+* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/download/dmg.v1.0/LMTokenCook.dmg)
 
 ---
 
@@ -31,7 +31,9 @@ How do you ensure the AI considers *all* relevant information if you can't paste
 
 By feeding these servings one after another, you can effectively saturate the LLM's full context window, ensuring it operates with the complete background information necessary for high-quality, contextually aware responses. This allows you to leverage the full power of your AI subscriptions, even through interfaces that have restricted prompt windows. The output is clean, token-efficient plain text for maximum compatibility and recall.
 
-<img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="60%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
+<div align="center">
+<img src="assets/Program_Preview.png" alt="LMTokenCook GUI Screenshot" width="60%" style="border: 1px solid #FFEB70; border-radius: 5px;"/>
+</div>
 
 ---
 
@@ -63,7 +65,9 @@ By feeding these servings one after another, you can effectively saturate the LL
 
 ### 🖼️ Example: Gemini Workflow with Servings
 
-<img src="assets/working-example.png" alt="Gemini Working with Servings" width="50%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
+<div align="center">
+<img src="assets/working-example.png" alt="Gemini Working with Servings" width="50%" style="border: 1px solid #FFEB70; border-radius: 5px;"/>
+</div>
 
 *Above: An example showing multiple LMTokenCook servings being sequentially pasted into Google Gemini, enabling analysis of content far exceeding the single prompt limit, thereby utilizing more of the available context window.*
 
@@ -141,8 +145,10 @@ Maximizing LMTokenCook requires understanding how Large Language Models (LLMs) h
     3.  *(Repeat...)*
     4.  *Prompt N+1:* `"[Paste content of serving_N_of_N.txt] Now, based on all the context provided, please [Your actual question or task]."` -> Send.
 
-    <img src="assets/working-example.png" alt="Working Example: Gemini Multi-Servings Upload" width="50%" style="display:block;margin:auto;border: 1px solid #FFEB70; border-radius: 5px;"/>
-    *Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
+    <div align="center">
+<img src="assets/working-example.png" alt="Working Example: Gemini Multi-Servings Upload" width="50%" style="border: 1px solid #FFEB70; border-radius: 5px;"/>
+</div>
+*Above: Gemini successfully receiving and processing multiple LMTokenCook serving files in sequence.*
 
 ---
 
@@ -198,6 +204,34 @@ Contributions, bug reports, and feature suggestions are welcome via the [GitHub 
 Special thanks to:
 
 * **Garrett Montagne** – For invaluable technical assistance in resolving complex `tiktoken` dependency and packaging challenges across Windows and macOS, significantly improving build reliability and providing crucial troubleshooting support.
+
+---
+
+### 🛟 Need Help? Support & Contact
+
+If you experience any issues, bugs, security concerns, or have questions about LMTokenCook, we want to hear from you! Your feedback is essential to ensuring the reliability, security, and ongoing improvement of this tool.
+
+**How to Contact Support:**
+
+- **Email:** [support@dropshockdigital.com](mailto:support@dropshockdigital.com)
+
+**Please contact us if you encounter any of the following:**
+- Application crashes, freezes, or unexpected errors
+- Problems with file processing, output, or token counts
+- Security vulnerabilities or privacy concerns
+- Installation or compatibility issues on Windows or macOS
+- Feature requests or usability suggestions
+- Any other feedback, questions, or concerns
+
+When reaching out, please include as much detail as possible:
+- Your operating system and version (e.g., Windows 11, macOS Sonoma)
+- The version of LMTokenCook you are using
+- Steps to reproduce the issue
+- Any error messages, screenshots, or output files that may help us diagnose the problem
+
+**Your privacy and security are important to us.** All support requests are handled confidentially by the DropShock Digital team. We aim to respond to all inquiries as quickly as possible.
+
+Thank you for helping us make LMTokenCook better for everyone!
 
 ---
 
