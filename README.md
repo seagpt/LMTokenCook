@@ -6,7 +6,7 @@
 ## 🚀 Download
 
 * [**Download for Windows (.exe)**](https://github.com/seagpt/LMTokenCook/releases/download/exe_v1.0/LMTokenCook.exe)
-* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/download/dmg.v1.0/LMTokenCook.dmg)
+* [**Download for macOS (.dmg)**](https://github.com/seagpt/LMTokenCook/releases/download/dmg.v1.0/LMTokenCook.app.zip)
 
 ---
 
