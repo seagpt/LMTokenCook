@@ -1,0 +1,15 @@
+tunnel: [YOUR-TUNNEL-UUID-HERE]
+credentials-file: C:\Users\user\.cloudflared\credentials.json
+
+ingress:
+  # Rule 1: Send API requests to the Python Backend
+  - hostname: cook.dropshockdigital.com
+    path: /api/*
+    service: http://localhost:8000
+
+  # Rule 2: Send everything else to the React Frontend
+  - hostname: cook.dropshockdigital.com
+    service: http://localhost:5173
+
+  # Rule 3: Catch-all (required)
+  - service: http_status:404

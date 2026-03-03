@@ -1,0 +1,13 @@
+tunnel: quick-tunnel # Or UUID if using persistent tunnel
+
+ingress:
+  # Rule 1: Send Stats/API requests to the Python Backend
+  # Matches /stats followed by anything (e.g. /stats, /stats/increment)
+  - path: /stats*
+    service: http://backend:8000
+
+  # Rule 2: Send everything else to the React Frontend
+  - service: http://frontend:5173
+
+  # Rule 3: Catch-all (required safety net, though Rule 2 covers most)
+  - service: http_status:404

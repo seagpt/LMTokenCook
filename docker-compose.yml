@@ -1,0 +1,68 @@
+services:
+  # ----------------------------
+  # 🐍 BACKEND (Python/FastAPI)
+  # ----------------------------
+  backend:
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    container_name: lmtokencook-backend
+    ports:
+      - "127.0.0.1:8000:8000" # Localhost only, not public
+    volumes:
+      - ./src/server:/app # Hot-reload dev volume
+    networks:
+      - lmtokencook-net
+
+  # ----------------------------
+  # ⚛️ FRONTEND (React/Vite)
+  # ----------------------------
+  frontend:
+    build:
+      context: ./src/ui
+      dockerfile: Dockerfile
+    container_name: lmtokencook-frontend
+    ports:
+      - "127.0.0.1:5173:5173" # Localhost only
+    volumes:
+      - ./src/ui:/app
+      - /app/node_modules # Isolate node_modules inside container
+    environment:
+      # Browser runs outside container, so it hits localhost:8000 mapped port
+      - VITE_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - lmtokencook-net
+  # ----------------------------
+  # 🚦 NGINX (Reverse Proxy)
+  # ----------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: lmtokencook-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "127.0.0.1:8080:80" # Local access to the Unified Proxy
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - lmtokencook-net
+
+  # ----------------------------
+  # ☁️ CLOUDFLARE (Sidecar)
+  # ----------------------------
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: lmtokencook-tunnel
+    restart: unless-stopped
+    command: tunnel --url http://nginx:80
+    networks:
+      - lmtokencook-net
+    depends_on:
+      - nginx
+
+networks:
+  lmtokencook-net:
+    driver: bridge

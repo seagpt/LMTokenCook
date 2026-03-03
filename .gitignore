@@ -1,0 +1,27 @@
+# Dependency directories
+node_modules/
+dist/
+build/
+venv/
+.venv/
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# --- STRICT PRIVACY POLICY ---
+# Exclude all markdown files globally except the main README
+*.md
+!README.md
+
+# Explicitly block AI Context directories
+docs/ai_context/
+ai_context/
+
+# Assets & Archives
+*.zip
+*.tar.gz
+archive/
+_archive/
+_Legacy*/
