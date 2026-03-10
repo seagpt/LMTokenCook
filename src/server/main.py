@@ -111,6 +111,10 @@ async def cook_text(request: CookRequest):
 if os.path.exists("/app/static"):
     app.mount("/assets", StaticFiles(directory="/app/static/assets"), name="assets")
 
+    @app.get("/")
+    async def serve_root():
+        return FileResponse("/app/static/index.html")
+
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
         # Serve index.html for unknown routes to allow client-side routing

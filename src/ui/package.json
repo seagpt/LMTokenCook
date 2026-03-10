@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "tsc -b && vite build",
         "preview": "vite preview"
     },
     "dependencies": {
@@ -20,6 +20,7 @@
     },
     "devDependencies": {
         "@types/file-saver": "^2.0.7",
+        "@types/node": "^25.4.0",
         "@types/react": "^18.2.66",
         "@types/react-dom": "^18.2.22",
         "@vitejs/plugin-react": "^4.2.1",
