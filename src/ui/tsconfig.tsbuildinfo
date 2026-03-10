@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/foundermodal.tsx","./src/components/landingpage.tsx","./src/components/legalmodal.tsx","./src/components/logicmodal.tsx","./src/components/payoffmodal.tsx","./src/components/tooltip.tsx","./src/lib/chunker.test.ts","./src/lib/chunker.ts","./src/lib/fs-handler.ts"],"version":"5.9.3"}

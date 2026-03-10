@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { Shield, Database, FileCode, Zap, Github, Globe, ArrowDown, Linkedin, Mail, BookOpen, AlertTriangle, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { Shield, Database, FileCode, Zap, ArrowDown, BookOpen, AlertTriangle, ArrowRight } from 'lucide-react';
 import { LegalModal } from './LegalModal';
-import clsx from 'clsx';
+import { LogicModal } from './LogicModal';
+import { PayoffModal } from './PayoffModal';
+import { FounderModal } from './FounderModal';
 
 interface LandingPageProps {
     onStart: () => void;
@@ -10,40 +12,12 @@ interface LandingPageProps {
 
 export function LandingPage({ onStart }: LandingPageProps) {
     const [legalOpen, setLegalOpen] = useState<'privacy' | 'terms' | null>(null);
-    const [stats, setStats] = useState({ tokens: 12500000, chunks: 4500, runs: 120 });
-    const [scrolled, setScrolled] = useState(false);
+    const [logicOpen, setLogicOpen] = useState(false);
+    const [payoffOpen, setPayoffOpen] = useState(false);
+    const [founderOpen, setFounderOpen] = useState(false);
 
-    // Fetch Real Stats (Mock for now, will connect to API next)
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                // In a real scenario, this would be: await fetch('/api/stats')
-                // For now, simpler mock or localStorage could be used, but user wants REAL tracking.
-                // We will implement the fetch logic assuming the backend exists on port 8000
-                // Use relative path for Vite proxy (dev) or Nginx (prod)
-                const res = await fetch('/stats').catch(() => null);
-                if (res && res.ok) {
-                    const data = await res.json();
-                    setStats(data);
-                }
-            } catch (e) {
-                console.log("Stats fetch failed (Endpoint might not be ready)");
-            }
-        };
-        fetchStats();
-        // Poll every 60s
-        const interval = setInterval(fetchStats, 60000);
-        return () => clearInterval(interval);
-    }, []);
 
-    // Scroll Listener
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+
 
     return (
         <div className="min-h-screen bg-black text-white font-sans selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
@@ -60,36 +34,16 @@ export function LandingPage({ onStart }: LandingPageProps) {
                 />
             </div>
 
-            {/* Nav */}
-            <nav className={clsx("fixed top-0 w-full z-50 border-b transition-all duration-300", scrolled ? "bg-black/80 backdrop-blur-md border-white/5" : "bg-transparent border-transparent")}>
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <img src="/LMTC_Icon.png" alt="Logo" className="w-8 h-8 object-contain" />
-                        <span className="font-bold tracking-tight hidden sm:block">LMTokenCook</span>
-                    </div>
 
-                    <div className="flex items-center gap-2 md:gap-6 text-xs md:text-sm font-bold text-neutral-400">
-                        {/* Desktop Links */}
-                        <a href="https://dropshockdigital.com" target="_blank" className="hover:text-amber-500 transition-colors hidden md:block">DropShock Digital</a>
-                        <a href="https://stevenseagondollar.com" target="_blank" className="hover:text-amber-500 transition-colors hidden md:block">Steven Seagondollar</a>
-                        <a href="https://github.com/DropShock-Digital" target="_blank" className="hover:text-white transition-colors flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full hover:bg-white/10">
-                            <Github className="w-4 h-4" />
-                            <span className="hidden sm:block">GitHub</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
 
             {/* Fullscreen Hero */}
-            <header className="relative h-screen flex flex-col items-center justify-center text-center px-6 max-w-7xl mx-auto z-10">
+            <header className="relative min-h-screen py-32 flex flex-col items-center justify-center text-center px-6 max-w-7xl mx-auto z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <div className="inline-block px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-bold uppercase tracking-wider mb-8 backdrop-blur-md">
-                        The AI Power-User's CAG Parsing Engine
-                    </div>
+
 
                     {/* Logo Patch */}
                     <motion.div
@@ -109,24 +63,22 @@ export function LandingPage({ onStart }: LandingPageProps) {
                             transition={{ duration: 4, repeat: Infinity }}
                         />
                         <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold tracking-tight mb-8 leading-tight">
-                            Cook Your Files Into <br />
+                            Cook Your Context <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-orange-400 to-amber-600">
-                                AI-WebUI Ready Servings
+                                Cheat Prompt Windows
                             </span>
                         </h1>
                     </div>
 
-                    <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed mb-10 px-4">
-                        Process, tokenize, and perfectly portion your local data for any AI web interface.
-                        <br />
-                        <span className="text-white/60 text-base mt-2 block">
-                            By Steven Seagondollar | DropShock Digital
+                    <div className="flex flex-col items-center gap-4 mb-16 md:mb-20">
+                        <span className="text-sm uppercase tracking-[0.2em] text-white/30">
+                            Steven Seagondollar | DropShock Digital
                         </span>
-                    </p>
+                    </div>
 
                     <button
                         onClick={onStart}
-                        className="group relative inline-flex items-center gap-3 px-8 py-5 bg-white text-black rounded-full font-bold text-xl hover:bg-neutral-200 transition-all shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98]"
+                        className="group relative inline-flex items-center gap-3 px-8 py-5 bg-white text-black rounded-full font-bold text-xl hover:bg-neutral-200 transition-all shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] mb-16"
                     >
                         <img src="/LMTC_Icon.png" alt="LMTokenCook" className="w-8 h-8 object-contain" />
                         <span>Start Cooking Now</span>
@@ -139,106 +91,32 @@ export function LandingPage({ onStart }: LandingPageProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1, y: [0, 10, 0] }}
                     transition={{ delay: 1, duration: 2, repeat: Infinity, times: [0, 0.5, 1], ease: "easeInOut" }}
-                    className="absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer text-white/30 hover:text-white transition-colors"
+                    className="absolute bottom-6 flex flex-col items-center gap-2 cursor-pointer text-white/20 hover:text-white transition-colors"
                 >
-                    <span className="text-xs uppercase tracking-widest">Scroll to Learn More</span>
-                    <ArrowDown className="w-6 h-6" />
+                    <span className="text-[10px] uppercase tracking-[0.2em]">Scroll to Learn More</span>
+                    <ArrowDown className="w-5 h-5" />
                 </motion.div>
             </header>
 
-            {/* 3-Box Educational Flow (Awareness -> Problem -> Solution) */}
-            <section className="py-24 bg-neutral-900/10 border-y border-white/5 relative z-10 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch relative">
 
-                        {/* 1. Awareness (Blue) - Potential */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="p-8 rounded-3xl bg-blue-900/10 border border-blue-500/20 backdrop-blur-sm relative overflow-hidden flex flex-col h-full"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl -z-10 rounded-full" />
-                            <h2 className="text-sm font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2 mb-6">
-                                <BookOpen className="w-4 h-4" /> Accurate Short-Term Memory
-                            </h2>
-                            <ul className="space-y-6 text-sm text-neutral-400 leading-relaxed flex-1">
-                                <li>
-                                    <strong className="text-blue-200 block mb-1 text-base">Modern AI Context Windows</strong>
-                                    Modern AI models have memory in the form of a "Context Window." This is essentially the model's <strong>short-term memory</strong>, capable of holding entire books or codebases at once, and responding in consideration of what's loaded with extremely high accuracy.
-                                </li>
-                                <li>
-                                    <strong className="text-blue-200 block mb-1 text-base">Context Augmented Generation (CAG)</strong>
-                                    CAG is a simple technique where you <strong>manually pre-load</strong> the context window with information you want taken into consideration. Strategic context loading is the easiest and most accurate way for any AI to address a user's query.
-                                </li>
-                            </ul>
 
-                            {/* Arrow for Desktop */}
-                            <div className="hidden lg:flex absolute top-1/2 -right-6 z-20 text-white/20">
-                                <ArrowRight className="w-8 h-8" />
-                            </div>
-                        </motion.div>
+            {/* Showcase Animation with Hook */}
+            <section className="py-24 bg-black relative z-10">
+                <div className="max-w-7xl mx-auto px-6 text-center">
 
-                        {/* 2. The Problem (Red) - The Bottleneck */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="p-8 rounded-3xl bg-red-900/10 border border-red-500/20 backdrop-blur-sm relative overflow-hidden flex flex-col h-full"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-3xl -z-10 rounded-full" />
-                            <h2 className="text-sm font-bold text-red-400 uppercase tracking-widest flex items-center gap-2 mb-6">
-                                <AlertTriangle className="w-4 h-4" /> The Paid AI Catch
-                            </h2>
-                            <ul className="space-y-6 text-sm text-neutral-400 leading-relaxed flex-1">
-                                <li>
-                                    <strong className="text-red-200 block mb-1 text-base">The Hidden Interface Limit</strong>
-                                    You pay an AI subscription to save on API costs, but to offset the providers costs, the web interface <strong>limits how many tokens you can send</strong> in a single prompt (often as low as 8k-32k tokens, down from the model's actual 128K - 1M capacity).
-                                </li>
-                                <li>
-                                    <strong className="text-red-200 block mb-1 text-base">Forced "RAG" (Search)</strong>
-                                    This forces you to use "RAG" (Search) by attaching files. The AI <strong>won't look at the big picture</strong>; it only reviews what relevance searches return from your file, losing the ability to reason globally.
-                                </li>
-                            </ul>
-
-                            {/* Arrow for Desktop */}
-                            <div className="hidden lg:flex absolute top-1/2 -right-6 z-20 text-white/20">
-                                <ArrowRight className="w-8 h-8" />
-                            </div>
-                        </motion.div>
-
-                        {/* 3. The Solution (Green) - Serialization */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 }}
-                            className="p-8 rounded-3xl bg-emerald-900/10 border border-emerald-500/20 backdrop-blur-sm relative overflow-hidden flex flex-col h-full"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl -z-10 rounded-full" />
-                            <h2 className="text-sm font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2 mb-6">
-                                <Zap className="w-4 h-4" /> Full-Context on Subscription
-                            </h2>
-                            <ul className="space-y-6 text-sm text-neutral-400 leading-relaxed flex-1">
-                                <li>
-                                    <strong className="text-emerald-200 block mb-1 text-base">Mathematical "Servings"</strong>
-                                    We needed a way to mathematically split your data into "Servings" that <strong>fit the Prompt Window perfectly</strong>, maximizing the density of every message to load the context window fully.
-                                </li>
-                                <li>
-                                    <strong className="text-emerald-200 block mb-1 text-base">Model Aligned Workflow</strong>
-                                    Injecting headers like "Part 1 of 5... Wait" allows us to <strong>prompt engineer the interface</strong> into treating multiple messages as one continuous stream, unlocking full CAG operations.
-                                </li>
-                            </ul>
-                        </motion.div>
-
+                    {/* The Hook (Moved Here) */}
+                    <div className="mb-20">
+                        <h2 className="text-2xl md:text-5xl font-bold text-white max-w-5xl mx-auto leading-tight mb-8">
+                            You Bought The Whole Context Window <br className="hidden md:block" />
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-orange-400 to-amber-600">
+                                Use The Whole Context Window
+                            </span>
+                        </h2>
+                        <p className="text-lg md:text-xl text-neutral-400 max-w-4xl mx-auto leading-relaxed">
+                            AI apps restrict your prompt length, limiting you from using your full context window. <br className="hidden md:block" />We bypass those limits by parsing your context to fit the prompt window.
+                        </p>
                     </div>
-                </div>
-            </section>
 
-            {/* Showcase Animation (Replaced by App Screenshot) */}
-            <section className="py-12 bg-black relative z-10">
-                <div className="max-w-6xl mx-auto px-6 text-center">
                     <div className="mb-10">
                         <span className="text-xs font-bold text-neutral-500 tracking-[0.2em] uppercase block mb-2">DropShock Digital Presents</span>
                         <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">LMTokenCook</h2>
@@ -249,16 +127,20 @@ export function LandingPage({ onStart }: LandingPageProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="relative rounded-xl overflow-hidden shadow-[0_0_100px_rgba(245,158,11,0.15)] border border-white/10"
+                        className="relative rounded-xl overflow-hidden shadow-[0_0_100px_rgba(245,158,11,0.15)] border border-white/10 max-w-4xl mx-auto"
                     >
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 pointer-events-none" />
 
                         {/* App Screenshot */}
-                        <div className="relative group text-center">
+                        <button
+                            onClick={onStart}
+                            className="relative group text-center block w-full cursor-pointer overflow-hidden rounded-xl"
+                        >
+                            <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/5 transition-colors z-20" />
                             <img
                                 src="/app_hero_screenshot.png"
                                 alt="LMTokenCook Application Interface"
-                                className="w-full h-auto max-h-[80vh] object-contain mx-auto opacity-90 group-hover:opacity-100 transition-opacity"
+                                className="w-full h-auto object-cover mx-auto opacity-90 group-hover:opacity-100 transition-all duration-500 group-hover:scale-[1.01]"
                                 onError={(e) => {
                                     // Fallback if screenshot missing (auto-recovery to abstract)
                                     (e.target as HTMLImageElement).style.display = 'none';
@@ -270,46 +152,16 @@ export function LandingPage({ onStart }: LandingPageProps) {
                                 <div className="absolute inset-x-0 top-0 h-1 bg-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.8)] z-20 animate-[scan_3s_ease-in-out_infinite]" />
                                 <span className="text-amber-500 font-mono">Scanning... (Screenshot Placeholder)</span>
                             </div>
-                        </div>
+                        </button>
                     </motion.div>
                 </div>
             </section>
 
-            {/* STATS CARD (New Placement) */}
-            <section className="py-24 px-6 relative z-10">
-                <div className="max-w-4xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        className="bg-neutral-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur text-center"
-                    >
-                        <div className="flex items-center justify-center gap-2 mb-6 text-amber-500 text-sm font-bold tracking-widest uppercase">
-                            <Globe className="w-4 h-4" /> Global Community Impact
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-bold mb-10">Used by AI Power-Users Worldwide</h2>
+            {/* 3-Box Educational Flow (Removed from here) */}
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-white/5">
-                            <div className="p-4">
-                                <div className="text-4xl font-mono font-bold text-white mb-2">{stats.tokens.toLocaleString()}</div>
-                                <div className="text-sm text-neutral-500 uppercase tracking-wider">Tokens Processed</div>
-                            </div>
-                            <div className="p-4">
-                                <div className="text-4xl font-mono font-bold text-white mb-2">{stats.chunks.toLocaleString()}</div>
-                                <div className="text-sm text-neutral-500 uppercase tracking-wider">Chunks Created</div>
-                            </div>
-                            <div className="p-4">
-                                <div className="text-4xl font-mono font-bold text-white mb-2">{stats.runs.toLocaleString()}</div>
-                                <div className="text-sm text-neutral-500 uppercase tracking-wider">Happy Cooks</div>
-                            </div>
-                        </div>
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-500/10 to-transparent" />
 
-                        <p className="mt-8 text-xs text-neutral-500">
-                            * Real-time metrics from the distributed LMTokenCook network.
-                        </p>
-                    </motion.div>
-                </div>
-            </section>
+
 
             {/* 3 Steps */}
             <section className="py-24 px-6 max-w-7xl mx-auto relative z-10">
@@ -323,7 +175,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
                         </div>
                         <h3 className="text-xl font-bold mb-3">Smart Scan & Extract</h3>
                         <p className="text-neutral-400 text-sm leading-relaxed mb-4">
-                            Select entire folders to recursively scan. We filter out junk (binary, .git, node_modules) and extract text from code, markdown, and data files.
+                            Don't waste tokens on binary noise. We recursively scan folders, filtering out non-text assets (images, compiled binaries) and .git bloat to ensure the LLM only reads high-value code and documentation.
                         </p>
                         <ul className="text-xs text-neutral-500 space-y-2">
                             <li className="flex items-center gap-2"><div className="w-1 h-1 bg-blue-500 rounded-full" /> Ignores binaries & archives</li>
@@ -339,7 +191,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
                         </div>
                         <h3 className="text-xl font-bold mb-3">Structure & Tokenize</h3>
                         <p className="text-neutral-400 text-sm leading-relaxed mb-4">
-                            We map your file hierarchy and count tokens using <span className="font-mono text-white/70">tiktoken (cl100k_base)</span>—the same logic used by GPT-4 and Gemini for maximum accuracy.
+                            We map your file hierarchy and count tokens using <span className="font-mono text-white/70">cl100k_base</span>—the exact encoding logic used by Frontier Models. This ensures mathematical precision, preventing 'Prompt Too Long' errors.
                         </p>
                         <ul className="text-xs text-neutral-500 space-y-2">
                             <li className="flex items-center gap-2"><div className="w-1 h-1 bg-purple-500 rounded-full" /> Generates File Map / TOC</li>
@@ -355,104 +207,98 @@ export function LandingPage({ onStart }: LandingPageProps) {
                         </div>
                         <h3 className="text-xl font-bold mb-3">Intelligent Servings</h3>
                         <p className="text-neutral-400 text-sm leading-relaxed mb-4">
-                            Your data is split into sequential chunks that fit your AI's window perfectly. We inject smart prompts to guide the AI to "wait for the next chunk" effectively.
+                            We inject sequential logic headers into every chunk. This strictly instructs the AI to 'hold state' and wait for the final file before executing, preventing premature or fragmented answers.
                         </p>
                         <ul className="text-xs text-neutral-500 space-y-2">
-                            <li className="flex items-center gap-2"><div className="w-1 h-1 bg-amber-500 rounded-full" /> Anti-Hallucination Headers</li>
+                            <li className="flex items-center gap-2"><div className="w-1 h-1 bg-amber-500 rounded-full" /> State-Preservation Headers</li>
                             <li className="flex items-center gap-2"><div className="w-1 h-1 bg-amber-500 rounded-full" /> Clean Sequential Output</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            {/* The Payoff */}
-            <section className="py-24 bg-gradient-to-b from-neutral-900/20 to-black px-6 relative z-10">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-3xl font-bold mb-12">The Payoff: <span className="text-amber-500">Context Augmented Generation</span></h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-white text-lg border-b border-white/10 pb-2">Deeper Analysis</h4>
-                            <ul className="text-xs text-neutral-400 space-y-3 list-disc pl-4 marker:text-amber-500">
-                                <li>Achieve <strong>Global Context</strong>: The LLM 'reads' the whole book, not just the search results.</li>
-                                <li>Identify hidden trends and correlations scattered across hundreds of separate files.</li>
-                                <li>Eliminate 'Lossy Summarization' by feeding raw source material directly.</li>
-                            </ul>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-white text-lg border-b border-white/10 pb-2">Better Code</h4>
-                            <ul className="text-xs text-neutral-400 space-y-3 list-disc pl-4 marker:text-amber-500">
-                                <li>Refactor complex architectures by letting the AI see cyclic dependencies across the full stack.</li>
-                                <li>Generate integration tests that accurately reflect the logic of the entire repository.</li>
-                                <li>Standardize coding patterns across legacy and modern directories simultaneously.</li>
-                            </ul>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-white text-lg border-b border-white/10 pb-2">Coherent Writing</h4>
-                            <ul className="text-xs text-neutral-400 space-y-3 list-disc pl-4 marker:text-amber-500">
-                                <li>Feed 300+ pages of prior chapters to ensure perfect character voice consistency.</li>
-                                <li>Detect plot holes or timeline contradictions that span across multiple volumes.</li>
-                                <li>Maintain distinct thematic tone without the AI drifting into generic tropes.</li>
-                            </ul>
-                        </div>
-                        <div className="space-y-4">
-                            <h4 className="font-bold text-white text-lg border-b border-white/10 pb-2">Complete Answers</h4>
-                            <ul className="text-xs text-neutral-400 space-y-3 list-disc pl-4 marker:text-amber-500">
-                                <li>Force the AI to answer based <em>only</em> on your provided data, reducing hallucination.</li>
-                                <li>Get nuanced answers that consider the "long-tail" details of your documents.</li>
-                                <li>Save money by utilizing the flat-fee Web UI for heavy-lifting analysis.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-500/10 to-transparent" />
 
-            {/* Founder's Message */}
-            <section className="py-24 bg-neutral-900 border-t border-white/5 relative z-10">
-                <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-12 items-center">
-                    {/* Image / Avatar */}
-                    <div className="md:col-span-4 flex flex-col items-center justify-center text-center">
-                        <div className="w-48 h-48 rounded-full bg-neutral-800 border-4 border-amber-500/20 overflow-hidden shadow-2xl mb-6 relative group">
-                            <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-neutral-600">
-                                <span className="text-xs uppercase font-bold tracking-widest">Photo Placeholder</span>
+
+
+            {/* NEW 3-COLUMN GRID SECTION (Replacing Payoff, Logic, Founder) */}
+            <section className="py-32 px-6 relative z-10 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+
+                    {/* 1. The Payoff */}
+                    <div className="group relative rounded-3xl bg-neutral-900/30 border border-white/5 overflow-hidden flex flex-col hover:bg-neutral-900/50 transition-colors">
+                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-amber-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="p-8 flex flex-col h-full items-center text-center z-10">
+                            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6 ring-1 ring-amber-500/20 group-hover:ring-amber-500/40 transition-all">
+                                <Zap className="w-8 h-8 text-amber-500" />
                             </div>
-                            <img src="/SS_Suit_Backdrop.jpg" alt="Steven Seagondollar" className="w-full h-full object-cover relative z-10" />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-1">Steven Seagondollar</h3>
-                        <p className="text-xs text-amber-500 font-bold uppercase tracking-widest mb-6">Founder, DropShock Digital</p>
-
-                        <div className="flex gap-4">
-                            <a href="https://www.linkedin.com/in/stevenseagondollar/" target="_blank" rel="noreferrer" className="p-2 bg-white/5 rounded-full hover:bg-amber-500 hover:text-white transition-colors text-neutral-400">
-                                <Linkedin className="w-5 h-5" />
-                            </a>
-                            <a href="mailto:steven.seagondollar@dropshockdigital.com" className="p-2 bg-white/5 rounded-full hover:bg-amber-500 hover:text-white transition-colors text-neutral-400">
-                                <Mail className="w-5 h-5" />
-                            </a>
-                            <a href="https://stevenseagondollar.com" target="_blank" rel="noreferrer" className="p-2 bg-white/5 rounded-full hover:bg-amber-500 hover:text-white transition-colors text-neutral-400">
-                                <Globe className="w-5 h-5" />
-                            </a>
+                            <h3 className="text-2xl font-bold text-white mb-2">The Payoff</h3>
+                            <p className="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Context Augmented Generation</p>
+                            <p className="text-neutral-400 text-sm leading-relaxed mb-8">
+                                Deep Reasoning, Better Code, Coherent Writing. See what happens when the AI reads the whole book.
+                            </p>
+                            <div className="mt-auto">
+                                <button
+                                    onClick={() => setPayoffOpen(true)}
+                                    className="inline-flex items-center gap-2 text-sm font-bold text-white border-b border-amber-500/50 pb-0.5 hover:text-amber-500 hover:border-amber-500 transition-all"
+                                >
+                                    View Benefits <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Text Content */}
-                    <div className="md:col-span-8 space-y-6">
-                        <h2 className="text-3xl font-bold text-white mb-8 border-l-4 border-amber-500 pl-6">
-                            A Message from Our Founder
-                        </h2>
-
-                        <div className="prose prose-invert prose-neutral max-w-none text-neutral-300 leading-relaxed space-y-6 pl-6 italic">
-                            <p>
-                                In a previous role, I was tasked with analyzing <strong>years' worth of enterprise sales transcripts</strong> to create all new product documentation based on characteristics that satisfied clients. I was provided <strong>hundreds of videos</strong> that would've required me to spend the next month manually reviewing, but I needed to deliver fast. So I considered ways to solve the issue using AI. While we had no approved budget for API calls, we had a <strong>corporate subscription to ChatGPT Teams</strong>.
+                    {/* 2. The Logic (Existing Focus) */}
+                    <div className="group relative rounded-3xl bg-neutral-900/30 border border-white/5 overflow-hidden flex flex-col hover:bg-neutral-900/50 transition-colors">
+                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="p-8 flex flex-col h-full items-center text-center z-10">
+                            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-6 ring-1 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all">
+                                <BookOpen className="w-8 h-8 text-blue-500" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-2">The Logic</h3>
+                            <p className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-6">Why Context Matters</p>
+                            <p className="text-neutral-400 text-sm leading-relaxed mb-8">
+                                There is a gap between model capabilities and interface limits. We bridge it by "cheating" the window.
                             </p>
-                            <p>
-                                I couldn't paste <strong>almost 100,000 tokens</strong> of transcripts into the context of ChatGPT Teams due to its <strong>28,000 token maximum prompt window</strong>, and RAG wouldn't be comprehensive enough to consider the <strong>subliminal across-transcript details</strong> that shifted client sentiments. To solve this problem, I wrote a workflow patching script to chop the data into 'servings' that ChatGPT would accept sequentially. That script was later iterated, creating this fully featured patch program.
-                            </p>
+                            <div className="mt-auto">
+                                <button
+                                    onClick={() => setLogicOpen(true)}
+                                    className="inline-flex items-center gap-2 text-sm font-bold text-white border-b border-blue-500/50 pb-0.5 hover:text-blue-500 hover:border-blue-500 transition-all"
+                                >
+                                    Deep Dive / Mechanics <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                     </div>
+
+                    {/* 3. The Founder */}
+                    <div className="group relative rounded-3xl bg-neutral-900/30 border border-white/5 overflow-hidden flex flex-col hover:bg-neutral-900/50 transition-colors">
+                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="p-8 flex flex-col h-full items-center text-center z-10">
+                            <div className="w-16 h-16 rounded-full bg-neutral-800 border-2 border-white/10 overflow-hidden mb-6 shadow-xl group-hover:scale-105 transition-transform">
+                                <img src="/SS_Suit_Backdrop.jpg" alt="Steven Seagondollar" className="w-full h-full object-cover" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-white mb-2">The Founder</h3>
+                            <p className="text-xs font-bold text-purple-500 uppercase tracking-widest mb-6">Create with Purpose</p>
+                            <p className="text-neutral-400 text-sm leading-relaxed mb-8">
+                                "This tool began as a necessity... I needed an AI to reason across years of data, not just search it."
+                            </p>
+                            <div className="mt-auto">
+                                <button
+                                    onClick={() => setFounderOpen(true)}
+                                    className="inline-flex items-center gap-2 text-sm font-bold text-white border-b border-purple-500/50 pb-0.5 hover:text-purple-500 hover:border-purple-500 transition-all"
+                                >
+                                    Read Message <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="border-t border-white/5 py-12 bg-neutral-950 relative z-10">
+            <footer className="border-t border-amber-500/10 py-12 bg-neutral-950 relative z-10">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-neutral-500">
                     <div className="flex flex-col text-center md:text-left gap-1">
                         <span className="flex items-center justify-center md:justify-start gap-2 font-bold text-white">
@@ -460,7 +306,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
                             100% Local & Private Processing
                         </span>
                         <p className="text-[10px] text-neutral-600 max-w-md mt-2">
-                            ChatGPT, Claude, and Gemini are trademarks of their respective owners. DropShock Digital is not affiliated with OpenAI, Anthropic, or Google. This tool is an independent utility for data preprocessing.
+                            ChatGPT and Gemini are trademarks of their respective owners. DropShock Digital is not affiliated with OpenAI or Google. This tool is an independent utility for data preprocessing.
                         </p>
                     </div>
                     <p className="text-center md:text-left">© 2025 DropShock Digital. Created by Steven Seagondollar.</p>
@@ -484,6 +330,19 @@ export function LandingPage({ onStart }: LandingPageProps) {
             </footer>
 
             {/* Legal Modals */}
+            <LogicModal
+                isOpen={logicOpen}
+                onClose={() => setLogicOpen(false)}
+            />
+            <PayoffModal
+                isOpen={payoffOpen}
+                onClose={() => setPayoffOpen(false)}
+            />
+            <FounderModal
+                isOpen={founderOpen}
+                onClose={() => setFounderOpen(false)}
+            />
+
             <LegalModal
                 isOpen={legalOpen === 'terms'}
                 onClose={() => setLegalOpen(null)}
@@ -537,25 +396,8 @@ export function LandingPage({ onStart }: LandingPageProps) {
                         </section>
 
                         <section>
-                            <h3 className="text-white font-bold mb-2">2. Data Collection (Global Stats)</h3>
-                            <p>To monitor the utility and adoption of the tool, the application may send anonymous, aggregate usage counters to our central dashboard.</p>
-                            <ul className="list-disc pl-5 space-y-2 mt-2 bg-white/5 p-4 rounded-lg">
-                                <li><strong>What we count:</strong> Incrementing integers (e.g., "+1 chunking run", "+450 tokens processed").</li>
-                                <li><strong>What we DO NOT count:</strong> Filenames, file contents, IP addresses, user agents, or any personally identifiable information (PII).</li>
-                                <li><strong>Purpose:</strong> To display the "Community Stats" bar on the landing page and validate development resources.</li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h3 className="text-white font-bold mb-2">3. No Third-Party Tracking</h3>
+                            <h2 className="text-white font-bold mb-4">2. No Third-Party Tracking</h2>
                             <p>We do not use Google Analytics, Facebook Pixels, or third-party cookies. Your usage remains a private interaction between you and your computer.</p>
-                        </section>
-
-                        <section>
-                            <h3 className="text-white font-bold mb-2">4. Data Accuracy Disclaimer</h3>
-                            <div className="p-4 bg-amber-900/10 border border-amber-500/20 rounded-lg text-amber-200">
-                                <p>The "Community Stats" displayed are best-effort aggregate counters. As this is an independent open-source project, we cannot guarantee 100% precision in these numbers. Please view them as an indicative measure of our growing community rather than a certified data audit.</p>
-                            </div>
                         </section>
                     </div>
                 }

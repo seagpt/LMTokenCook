@@ -1,0 +1,94 @@
+# LMTokenCook
+
+> **Cook Your Context. Cheat Prompt Windows.**
+> You Bought The Whole Context Window. Use The Whole Context Window.
+
+## Overview
+LMTokenCook is an AI power-user tool designed to process local repositories into token-optimized "servings." It bridges the gap between massive backend context windows (1M+ tokens) and restricted frontend user input limits (8k-32k tokens), enabling users to bypass "Message Too Long" errors and leverage the full reasoning capabilities of Frontier Models (Gemini 1.5 Pro, Claude 3, GPT-4o).
+
+---
+
+## The 3-Step Recipe
+
+### 1. Smart Scan & Extract
+Don't waste tokens on binary noise. We recursively scan folders, filtering out non-text assets (images, compiled binaries) and .git bloat to ensure the LLM only reads high-value code and documentation.
+- Ignores binaries & archives
+- Supports drag-and-drop
+
+### 2. Structure & Tokenize
+We map your file hierarchy and count tokens using `cl100k_base`—the exact encoding logic used by Frontier Models. This ensures mathematical precision, preventing 'Prompt Too Long' errors.
+- Generates File Map / TOC
+- Accurate Token Counts
+
+### 3. Intelligent Servings
+We inject sequential logic headers into every chunk. This strictly instructs the AI to 'hold state' and wait for the final file before executing, preventing premature or fragmented answers.
+- State-Preservation Headers
+- Clean Sequential Output
+
+---
+
+## Detailed Logic: Why Context Matters
+
+### Native Model Capabilities (The Potential)
+- **Accurate Short-Term Memory**: Modern AI models have memory in the form of a "Context Window." This is essentially the model's short-term memory, capable of holding entire books or codebases at once.
+- **Direct Context Loading**: CAG (Context Augmented Generation) is a technique where you manually pre-load the context window. Strategic context loading is the most accurate way for any AI to address a complex query.
+
+### The Interface Bottleneck (The Problem)
+- **Backend Supports Full Context**: Many of the latest models have massive Context Windows (1M+ tokens) capable of holding your entire project. They are built to reason globally across thousands of files.
+- **Frontend Caps User Input**: The web interfaces you use limit your input to 8k-32k tokens, creating a gap between you and the model's full capabilities. This forces you to use RAG (search) when you need CAG (reasoning).
+
+### Cheat the Prompt Window (The Solution)
+- **Maximize Available Space**: LMTokenCook bridges the gap. It transforms your massive local files into perfectly sized 'servings' that fill your Web UI’s capacity to the absolute limit. You get the maximum amount of context into every message.
+- **Enforce Global Awareness**: We wrap every data chunk with smart 'Wait' instructions. This simple trick 'cheats' the interface, forcing the model to hold its thought and absorb your full project context before it generates a single word of its final answer.
+
+---
+
+## The Payoff: Context Augmented Generation
+
+### Deep Reasoning
+- True reasoning requires global context. The AI "reads" the whole book, rather than searching for keywords.
+- Identify hidden trends and correlations scattered across hundreds of separate files.
+- Eliminate "Lossy Summarization" by feeding raw source material directly.
+
+### Better Code
+- Refactor complex architectures by letting the AI see cyclic dependencies across the full stack.
+- Generate integration tests that accurately reflect the logic of the entire repository.
+- Standardize coding patterns across legacy and modern directories simultaneously.
+
+### Coherent Writing
+- Feed 300+ pages of prior chapters to ensure perfect character voice consistency.
+- Detect plot holes or timeline contradictions that span across multiple volumes.
+- Maintain distinct thematic tone without the AI drifting into generic tropes.
+
+### Complete Answers
+- Force the AI to answer based *only* on your provided data, reducing hallucination.
+- Get nuanced answers that consider the "long-tail" details of your documents.
+- Save money by utilizing the flat-fee Web UI for heavy-lifting analysis.
+
+---
+
+## A Note from the Founder
+"This tool began as a necessity, not a product. In a previous role, I was tasked with a massive challenge. I had to analyze years' worth of enterprise sales data. I needed to review the full transcripts of every multi-hour sales call we had ever conducted to find the root causes of success. Standard tools failed—they could only **search** the calls (RAG), but I needed an AI to **reason** across all of them (CAG) to find the patterns. I wrote a parsing script to chop the data for ChatGPT, and that script evolved into LMTokenCook.
+
+At DropShock Digital, my goal isn't just to build software. It is to ensure my clients achieve the best production results. If you are comfortable with less than friendly WebUIs, I highly recommend using **Google AI Studio** since it natively supports massive context. However, for those who prefer the standard ChatGPT workflow, have a strictly limited API budget, or need to process sensitive data offline before it touches the web, LMTokenCook remains the essential bridge."
+— **Steven Seagondollar**, Founder, DropShock Digital
+
+---
+
+## Legal & Privacy
+
+### 100% Local & Private Processing
+LMTokenCook operates on a simple principle: **We do not want your data.** The software runs entirely on your local machine using client-side technologies (WebAssembly, File System Access API). The application only accesses files you explicitly pick via the Browser File System Access API. No data is stored or transmitted outside your computer. We do not use Google Analytics, Facebook Pixels, or third-party cookies.
+
+### Terms of Use Verification
+- **Jurisdiction**: Hesperia, San Bernardino County, CA
+- **Liability**: To the maximum extent permitted by law, DropShock Digital and Steven Seagondollar shall NOT be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use this software.
+- **Responsibility**: You acknowledge that you are solely responsible for the content you process. You agree not to use this tool to process illegal content or violate the Terms of Service of any third-party AI provider.
+- **Accessibility**: We strive to adhere to WCAG 2.1 Level AA standards.
+
+---
+
+## Credits
+**Created by Steven Seagondollar | DropShock Digital**
+[https://dropshockdigital.com](https://dropshockdigital.com)
+[GitHub](https://github.com/DropShock-Digital)

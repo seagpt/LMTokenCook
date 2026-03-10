@@ -2,18 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    body {
+        @apply bg-neutral-950 text-neutral-100;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    /* Noise Overlay */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: url("https://grainy-gradients.vercel.app/noise.svg");
+        opacity: 0.05;
+        pointer-events: none;
+        z-index: 9999;
+    }
+}
+
 @layer utilities {
-  .dark-scroll::-webkit-scrollbar {
-    width: 8px;
-  }
-  .dark-scroll::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-  }
-  .dark-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-  .dark-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
+    .liquid-card {
+        @apply bg-glass-surface backdrop-blur-xl border border-glass-border shadow-2xl rounded-3xl relative overflow-hidden transition-all duration-300;
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            inset 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .liquid-card:hover {
+        @apply -translate-y-1 scale-[1.02] border-glass-shine;
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+    }
 }
