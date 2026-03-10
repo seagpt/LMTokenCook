@@ -3,7 +3,10 @@ import pathlib
 from typing import List, Dict, Any
 from datetime import datetime
 
-def build_manifest_metadata(input_path: pathlib.Path, output_subdir: str, scan_counts: dict, serving: dict) -> dict:
+
+def build_manifest_metadata(
+    input_path: pathlib.Path, output_subdir: str, scan_counts: dict, serving: dict
+) -> dict:
     return {
         "input_path": str(input_path.resolve()),
         "output_subdirectory": output_subdir,
@@ -16,19 +19,20 @@ def build_manifest_metadata(input_path: pathlib.Path, output_subdir: str, scan_c
         "total_estimated_tokens": scan_counts.get("estimated_tokens", 0),
         "serving_enabled": serving.get("enabled", False),
         "serving_size_threshold": serving.get("threshold", 0),
-        "servings_created": serving.get("created", 0)
+        "servings_created": serving.get("created", 0),
     }
+
 
 def write_manifest(
     output_path: pathlib.Path,
     metadata: dict,
     directory_structure: dict,
-    processed_files: List[Dict[str, Any]]
+    processed_files: List[Dict[str, Any]],
 ):
     manifest = {
         "metadata": metadata,
         "directory_structure": directory_structure,
-        "processed_files": processed_files
+        "processed_files": processed_files,
     }
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)

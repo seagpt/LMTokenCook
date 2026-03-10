@@ -1,5 +1,5 @@
+import os
 import pathlib
-from typing import List, Dict, Any
 import tiktoken
 
 
@@ -7,13 +7,14 @@ def serving_lines(
     lines: list,
     output_dir: pathlib.Path,
     serving_size: int,
-    encoding_name: str = "cl100k_base"
+    encoding_name: str = "cl100k_base",
 ) -> int:
     """
     Splits a list of lines into serving_XXX.txt files based on token count.
     Returns the number of chunks created.
     """
     import tiktoken
+
     enc = tiktoken.get_encoding(encoding_name)
     serving_number = 1
     current_serving_tokens = 0
@@ -35,7 +36,10 @@ def serving_lines(
     current_serving_lines = []
     for line in lines:
         line_tokens = len(enc.encode(line))
-        if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
+        if (
+            current_serving_tokens + line_tokens > serving_size
+            and current_serving_tokens > 0
+        ):
             serving_path = output_dir / f"serving_{serving_number}_of_{total_chunks}.txt"
             with open(serving_path, "w", encoding="utf-8") as f:
                 if serving_number < total_chunks:
@@ -66,6 +70,7 @@ def serving_lines(
         serving_files.append(serving_path)
     return len(serving_files)
 
+
 def serving_master_text(
     master_file: pathlib.Path,
     output_dir: pathlib.Path,
@@ -73,7 +78,7 @@ def serving_master_text(
     file_metadata: list,
     encoding_name: str = "cl100k_base",
     add_line_numbers: bool = False,
-    skip_empty_lines: bool = False
+    skip_empty_lines: bool = False,
 ) -> int:
     """
     Splits masterfile.txt into serving_XXX.txt files based on token count, using file_metadata for markers.
@@ -84,6 +89,7 @@ def serving_master_text(
     current_serving_tokens = 0
     current_serving_lines = []
     serving_files = []
+
     def write_chunk(serving_number, lines, total_chunks):
         serving_path = output_dir / f"serving_{serving_number}_of_{total_chunks}.txt"
         with open(serving_path, "w", encoding="utf-8") as f:
@@ -119,7 +125,10 @@ def serving_master_text(
     current_serving_lines = []
     for line in file_lines:
         line_tokens = len(enc.encode(line))
-        if current_serving_tokens + line_tokens > serving_size and current_serving_tokens > 0:
+        if (
+            current_serving_tokens + line_tokens > serving_size
+            and current_serving_tokens > 0
+        ):
             write_chunk(serving_number, current_serving_lines, total_chunks)
             serving_number += 1
             current_serving_lines = []
@@ -131,8 +140,8 @@ def serving_master_text(
     return len(serving_files)
 
 
-
 def count_tokens(text: str, encoding_name: str = "cl100k_base") -> int:
     import tiktoken
+
     enc = tiktoken.get_encoding(encoding_name)
     return len(enc.encode(text))

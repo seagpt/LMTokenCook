@@ -15,10 +15,21 @@ from datetime import datetime
 
 import threading
 
+
 class CancelledError(Exception):
     pass
 
-def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback=None, cancel_flag=None, keep_masterfile=False, add_line_numbers=False, skip_empty_lines=False):
+
+def run_lmtokencook(
+    input_path,
+    output_path,
+    chunk_size=28000,
+    progress_callback=None,
+    cancel_flag=None,
+    keep_masterfile=False,
+    add_line_numbers=False,
+    skip_empty_lines=False,
+):
     input_path = pathlib.Path(input_path)
     output_base = pathlib.Path(output_path)
 
@@ -70,12 +81,14 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
     file_metadata = []
     # Write directory tree as Ingredients (in-memory)
     master_lines.append("=== Ingredients (Directory Tree) ===")
+
     def _print_tree(d, prefix=""):
         for k, v in d.items():
             rel = v.get("rel_path", k)
             master_lines.append(f"{prefix}{rel}")
             if "children" in v:
                 _print_tree(v["children"], prefix + "  ")
+
     _print_tree(dir_struct)
     master_lines.append("")
     # Process each file
@@ -84,7 +97,9 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
             if progress_callback:
                 progress_callback("Cooking cancelled by chef!")
             raise CancelledError("Processing was cancelled by user.")
-        rel_path = str(f.relative_to(input_path.parent if input_path.is_file() else input_path))
+        rel_path = str(
+            f.relative_to(input_path.parent if input_path.is_file() else input_path)
+        )
         abs_path = str(f.resolve())
         ext = f.suffix.lower()
         extractor = get_extractor(ext)
@@ -115,43 +130,53 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
             master_lines.append(f"\n=== File End: {abs_path} ===\n")
             char_start = char_offset
             char_offset += len(text)
-            processed_files.append({
-                "relative_path": rel_path,
-                "absolute_path": abs_path,
-                "char_start_offset": char_start,
-                "char_end_offset": char_offset,
-                "char_count": char_offset - char_start,
-                "estimated_tokens": tokens,
-                "extraction_status": "Success",
-                "encoding_used": "utf-8"
-            })
-            file_metadata.append({
-                "absolute_path": abs_path,
-                "tokens": tokens,
-                "start_marker": f"{abs_path}\n",
-                "end_marker": f"\n=== File End: {abs_path} ===\n\n",
-                "content": text
-            })
+            processed_files.append(
+                {
+                    "relative_path": rel_path,
+                    "absolute_path": abs_path,
+                    "char_start_offset": char_start,
+                    "char_end_offset": char_offset,
+                    "char_count": char_offset - char_start,
+                    "estimated_tokens": tokens,
+                    "extraction_status": "Success",
+                    "encoding_used": "utf-8",
+                }
+            )
+            file_metadata.append(
+                {
+                    "absolute_path": abs_path,
+                    "tokens": tokens,
+                    "start_marker": f"{abs_path}\n",
+                    "end_marker": f"\n=== File End: {abs_path} ===\n\n",
+                    "content": text,
+                }
+            )
             if progress_callback:
-                progress_callback(f"[COOK] {abs_path} ({tokens} tokens)", idx+1, len(files))
+                progress_callback(
+                    f"[COOK] {abs_path} ({tokens} tokens)", idx + 1, len(files)
+                )
         except ExtractionError as e:
             scan_counts["failed_extraction"] += 1
-            processed_files.append({
-                "relative_path": rel_path,
-                "absolute_path": abs_path,
-                "extraction_status": f"Error: {e}",
-                "encoding_used": None
-            })
+            processed_files.append(
+                {
+                    "relative_path": rel_path,
+                    "absolute_path": abs_path,
+                    "extraction_status": f"Error: {e}",
+                    "encoding_used": None,
+                }
+            )
             if progress_callback:
                 progress_callback(f"[BURNT] {abs_path}: {e}")
         except Exception as e:
             scan_counts["failed_extraction"] += 1
-            processed_files.append({
-                "relative_path": rel_path,
-                "absolute_path": abs_path,
-                "extraction_status": f"Error: {e}",
-                "encoding_used": None
-            })
+            processed_files.append(
+                {
+                    "relative_path": rel_path,
+                    "absolute_path": abs_path,
+                    "extraction_status": f"Error: {e}",
+                    "encoding_used": None,
+                }
+            )
             if progress_callback:
                 progress_callback(f"[BURNT] {abs_path}: {e}")
 
@@ -173,14 +198,19 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
                     master_f.write(line + "\n")
         # Serving directly from in-memory lines
         from src.core.chunker import serving_lines
+
         num_chunks = serving_lines(master_lines, output_subdir, chunk_size)
         chunking = {"enabled": True, "threshold": chunk_size, "created": num_chunks}
         if not keep_masterfile:
             if progress_callback:
-                progress_callback(f"Servinged into {num_chunks} files. master_content.txt not written.")
+                progress_callback(
+                    f"Servinged into {num_chunks} files. master_content.txt not written."
+                )
         else:
             if progress_callback:
-                progress_callback(f"Servinged into {num_chunks} files. master_content.txt kept.")
+                progress_callback(
+                    f"Servinged into {num_chunks} files. master_content.txt kept."
+                )
     else:
         # Only write masterfile.txt if not chunking or keep_masterfile is True
         master_path = output_subdir / f"masterfile.t-{total_tokens}.txt"
@@ -191,7 +221,9 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
             progress_callback("Servinging not required.")
 
     # Manifest
-    metadata = build_manifest_metadata(input_path, output_subdir.name, scan_counts, chunking)
+    metadata = build_manifest_metadata(
+        input_path, output_subdir.name, scan_counts, chunking
+    )
     manifest_path = output_subdir / "manifest.json"
     write_manifest(manifest_path, metadata, dir_struct, processed_files)
     if progress_callback:
@@ -201,16 +233,20 @@ def run_lmtokencook(input_path, output_path, chunk_size=28000, progress_callback
         "output_dir": str(output_subdir),
         "manifest_path": str(manifest_path),
         "scan_counts": scan_counts,
-        "chunking": chunking
+        "chunking": chunking,
     }
 
+
 # CLI wrapper remains for CLI usage
+
 
 def main():
     parser = argparse.ArgumentParser(description="LMTokenCook Backend Prototype")
     parser.add_argument("--input", required=True, help="Input file or directory path")
     parser.add_argument("--output", required=True, help="Output directory path")
-    parser.add_argument("--chunk-size", type=int, default=28000, help="Token serving size threshold")
+    parser.add_argument(
+        "--chunk-size", type=int, default=28000, help="Token serving size threshold"
+    )
     args = parser.parse_args()
     try:
         run_lmtokencook(args.input, args.output, args.chunk_size, progress_callback=print)
