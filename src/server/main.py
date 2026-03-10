@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import sqlite3
 import os
@@ -89,6 +91,19 @@ async def cook_text(request: CookRequest):
     tokens = len(request.text) # Quick approx or real use tiktoken if available
     return {"message": "Python Cooker Ready", "input_length": len(request.text)}
 
+# Serve static files (React frontend) in production
+if os.path.exists("/app/static"):
+    app.mount("/assets", StaticFiles(directory="/app/static/assets"), name="assets")
+    
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Serve index.html for unknown routes to allow client-side routing
+        file_path = f"/app/static/{full_path}"
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse("/app/static/index.html")
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("src.server.main:app", host="0.0.0.0", port=port, reload=True)

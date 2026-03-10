@@ -30,4 +30,4 @@ COPY --from=ui-build /app/ui/dist /app/static
 EXPOSE 8000
 
 # Run
-CMD ["uvicorn", "src.server.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn src.server.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
