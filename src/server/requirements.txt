@@ -5,3 +5,4 @@ pydantic
 pytest
 flake8
 httpx
+tiktoken
