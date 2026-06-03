@@ -4,6 +4,14 @@ dist/
 build/
 venv/
 .venv/
+.venv_mac/
+__pycache__/
+*.py[cod]
+
+# Generated logs / local test output
+*.log
+*_output.txt
+*_utf8.log
 
 # Environment / Secrets
 .env
