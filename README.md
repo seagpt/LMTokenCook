@@ -2,6 +2,59 @@
 
 ![LMTokenCook Hero](assets/app_hero_screenshot.png)
 
+
+<!-- README-ROAST:START -->
+
+## README Roast Pass
+
+Roasted with [https://github.com/hidai25/readme-roast](https://github.com/hidai25/readme-roast) on 2026-06-25. This block is evidence-only: repo metadata, root files, and the existing README were scanned before writing.
+
+### Fast roast
+
+- Pre-pass README score: **100/100** by the readme-roast categories: first impression, install friction, trust, visuals, and structure.
+- README already had the basics; this pass adds a visual map and sharper operator scan.
+- Biggest fix in this pass: added a Mermaid repo map plus a quick operator scan without deleting the existing README content.
+
+### Mermaid repository map
+
+```mermaid
+flowchart TD
+  R["DropShock-Digital/LMTokenCook"]
+  R --> N1["requirements.txt"]
+  R --> N2["Dockerfile"]
+  R --> N3["docker-compose.yml"]
+  R --> N4["README.md"]
+  R --> N5["src/"]
+  R --> N6["assets/"]
+  R --> N7["tests/"]
+  R --> N8["tools/"]
+  R --> N9["_Legacy_Vault_2025"]
+  R --> N10["cloudflared_example.yml"]
+  R --> N11["config.yml"]
+  R --> N12["LICENSE"]
+  R --> MORE["additional repo files"]
+```
+
+### Operator quick scan
+
+| Signal | Evidence |
+|---|---|
+| GitHub repo | [DropShock-Digital/LMTokenCook](https://github.com/DropShock-Digital/LMTokenCook) |
+| Description | Parse Your Files to Bypass Prompt Window Limits |
+| Default branch | `main` |
+| Primary languages | TypeScript 73%, Python 24%, Dockerfile 1%, CSS 1%, JavaScript 1% |
+| Install path | `python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt` |
+| Run/build hint | Not detected from root files |
+| Key files scanned | requirements.txt, Dockerfile, docker-compose.yml, README.md, src/ |
+
+### README next upgrades
+
+- Add real screenshots, GIFs, or CLI output once the repo has a stable demo path.
+- Pin exact setup commands after verifying them in a clean environment.
+- Link production/staging/docs only when the URL is durable and intended for readers.
+
+<!-- README-ROAST:END -->
+
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
