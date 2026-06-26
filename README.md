@@ -1,223 +1,88 @@
-# 🍳 LMTokenCook
+# LMTokenCook
 
-![LMTokenCook Hero](assets/app_hero_screenshot.png)
+![Repo type](https://img.shields.io/badge/type-profile%20organization%20hub-0f172a) ![Status](https://img.shields.io/badge/status-prototype-2563eb) ![Docs](https://img.shields.io/badge/docs-rich%20README-7c3aed) ![Visibility](https://img.shields.io/badge/visibility-public-16a34a)
 
+Parse Your Files to Bypass Prompt Window Limits.
 
-<!-- README-ROAST:START -->
+Built and maintained by **DropShock Digital**.
 
-## README Roast Pass
+---
 
-Roasted with [https://github.com/hidai25/readme-roast](https://github.com/hidai25/readme-roast) on 2026-06-25. This block is evidence-only: repo metadata, root files, and the existing README were scanned before writing.
+## First screen
 
-### Fast roast
+| Area | Detail |
+| --- | --- |
+| Repository | [`DropShock-Digital/LMTokenCook`](https://github.com/DropShock-Digital/LMTokenCook) |
+| Primary class | profile / organization hub |
+| Current posture | prototype |
+| Default branch | `main` |
+| Visibility | public |
+| Last README standardization | 2026-06-26 |
 
-- Pre-pass README score: **100/100** by the readme-roast categories: first impression, install friction, trust, visuals, and structure.
-- README already had the basics; this pass adds a visual map and sharper operator scan.
-- Biggest fix in this pass: added a Mermaid repo map plus a quick operator scan without deleting the existing README content.
+## What matters
 
-### Mermaid repository map
+- Make the repo purpose obvious in the first 30 seconds.
+- Put the architecture or workflow in a visual map before deep prose.
+- Keep commands, environment notes, and handoff risks close to the top.
+- Credit the real builder/maintainer while keeping client or project context separate from implementation notes.
+- Audit priority: `P2`
+
+## System map
 
 ```mermaid
 flowchart TD
-  R["DropShock-Digital/LMTokenCook"]
-  R --> N1["requirements.txt"]
-  R --> N2["Dockerfile"]
-  R --> N3["docker-compose.yml"]
-  R --> N4["README.md"]
-  R --> N5["src/"]
-  R --> N6["assets/"]
-  R --> N7["tests/"]
-  R --> N8["tools/"]
-  R --> N9["_Legacy_Vault_2025"]
-  R --> N10["cloudflared_example.yml"]
-  R --> N11["config.yml"]
-  R --> N12["LICENSE"]
-  R --> MORE["additional repo files"]
+    A["New repo / operator"] --> B["Template or hub"]
+    B --> C["Reusable standards"]
+    C --> D["Project-specific implementation"]
+    D --> E["Consistent handoff"]
+    B --> F["Examples + adoption notes"]
 ```
 
-### Operator quick scan
 
-| Signal | Evidence |
-|---|---|
-| GitHub repo | [DropShock-Digital/LMTokenCook](https://github.com/DropShock-Digital/LMTokenCook) |
-| Description | Parse Your Files to Bypass Prompt Window Limits |
-| Default branch | `main` |
-| Primary languages | TypeScript 73%, Python 24%, Dockerfile 1%, CSS 1%, JavaScript 1% |
-| Install path | `python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt` |
-| Run/build hint | Not detected from root files |
-| Key files scanned | requirements.txt, Dockerfile, docker-compose.yml, README.md, src/ |
+### Visual proof
 
-### README next upgrades
+![Lmtc Logo](assets/LMTC_Logo.png)
 
-- Add real screenshots, GIFs, or CLI output once the repo has a stable demo path.
-- Pin exact setup commands after verifying them in a clean environment.
-- Link production/staging/docs only when the URL is durable and intended for readers.
+![Lmtc Patch](assets/LMTC_Patch.png)
 
-<!-- README-ROAST:END -->
+![Architecture](assets/architecture.png)
 
-<div align="center">
+## Best features carried forward
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB.svg?logo=python&logoColor=white)](https://python.org)
-[![React](https://img.shields.io/badge/React-18-61DAFB.svg?logo=react&logoColor=black)](https://react.dev)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](https://docker.com)
-[![Status](https://img.shields.io/badge/Status-Active_Development-success.svg)](#)
+- Visual-first GitHub Markdown is kept, but constrained to one clear hero/asset lane.
+- Existing Mermaid thinking is preserved and moved near the top as the system map.
+- Existing setup intent is kept and reframed as a short operator path.
+- Architecture language is retained but converted into a skimmable diagram-first explanation.
+- Icon-rich scanning is retained where it helps readers move faster.
 
-**The AI Power-User's Context-Augmented Generation (CAG) Parsing Engine.**  
-*Chop giant codebases into bite-sized "servings" for Gemini 1.5 Pro, Claude 3 Opus, and ChatGPT.*
+## Operate this repo
 
-[Features](#-features) • [Installation](#-installation) • [Architecture](#-architecture) • [How It Works](#-how-it-works)
-
-</div>
-
----
-
-## 🧐 Why LMTokenCook?
-
-In the era of **Context-Augmented Generation (CAG)**, simply pasting code isn't enough. You need **precision**.
-
-Most AI engineers struggle with context windows. "Paste this file" turns into "Content too long." `LMTokenCook` solves this by treating your codebase like a dataset. It recursively scans your repository, counts tokens in real-time, and **intelligently segments** your code into "servings" that perfectly max out your chosen LLM's context window (e.g., 28k for ChatGPT, 60k for Gemini).
-
-> "I couldn't paste 100k tokens of data into ChatGPT. So I built the workflow patching script that evolved into this tool."
-
-## 🚀 Features
-
-*   **🧠 Smart Context Headers**: Every chunk includes a header explaining *exactly* which file it came from and which part (e.g., "Part 1 of 3"), preserving model context retention.
-*   **🔒 Local-First & Private**: Powered by the **File System Access API**. Your code is processed entirely in your browser or local Docker container. No cloud uploads.
-*   **⚔️ Dual-Head Architecture**:
-    *   **Browser Mode (Glaze)**: Instant, zero-setup processing via WebAssembly.
-    *   **Server Mode (Iron)**: A FastAPI backend for heavy-duty, headless automation and statistics tracking.
-*   **📊 Token Analytics**: Visualize the "weight" of your repository before you even start cooking.
-*   **🐋 Docker Ready**: One command (`docker-compose up`) spins up the entire stack, including a secure Cloudflare Tunnel for remote access.
-
----
-
-## 🛠️ Installation
-
-### Option 1: The "Power-User" (Docker) 🐳
-The recommended way to run. Spins up the Frontend, Backend, Nginx Proxy, and Cloudflare Sidecar.
+**Detected stack:** Python project metadata, Dockerfile, Docker Compose
 
 ```bash
-git clone https://github.com/DropShock-Digital/LMTokenCook.git
-cd LMTokenCook
-docker-compose up --build
-```
-
-> **Access**: Open `http://localhost:5173`.
-> **Public**: Check container logs for your unique `https://*.trycloudflare.com` URL.
-
-### Option 2: The "Contributor" (Local Dev) 💻
-Run the stack natively for debugging or contributing.
-
-**Backend (Python):**
-```bash
-# In /src/server
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+docker build -t local-app .
+docker compose up --build
 ```
 
-**Frontend (React):**
-```bash
-# In /src/ui
-npm install
-npm run dev
-```
+> Commands above are inferred from repository files and should be verified before they become release or client handoff instructions.
 
----
+## Documentation map
 
-## 🧩 Architecture
+- [`LICENSE`](LICENSE)
+- [`docker-compose.yml`](docker-compose.yml)
 
-LMTokenCook follows a **Dual-Head Monolith** pattern. See [STRUCTURE.md](STRUCTURE.md) for a deep dive into the folder structure.
+## Handoff notes
 
-### System Topology
-```mermaid
-graph TD
-    User[User / Browser] -->|HTTP/443| Cloudflare[Cloudflare Tunnel]
-    Cloudflare -->|HTTP/80| Nginx[Active Nginx Proxy]
-    
-    subgraph "Docker Network"
-        Nginx -->|/api| Backend[FastAPI Server]
-        Nginx -->|/| Frontend[Vite/React Static]
-    end
-    
-    Backend -->|SQL| DB[(Stats.db)]
-```
+| Area | Detail |
+| --- | --- |
+| Secrets | No `.env.example` was detected; add one before documenting environment-specific setup. |
+| License | License file detected. |
+| Owner credit | Built and maintained by DropShock Digital. |
+| Next documentation move | Add `docs/ARCHITECTURE.md` with the full system diagram and decisions. |
 
----
+## Maintenance standard
 
-## ⚙️ How It Works
-
-<details>
-<summary><strong>See the Data Flow (Click to Expand)</strong></summary>
-
-### The "Local Cook" Loop
-1.  **Selection**: You pick a folder via the browser's native file picker.
-2.  **Access**: The browser grants read-only access to that specific directory.
-3.  **Scan**: The app recursively walks the tree, ignoring patterns in `.dockerignore`.
-4.  **Tokenization**: An in-browser WASM tokenizer (TikToken) calculates weight.
-5.  **Chunking**: The algorithm slices files at line breaks to fill the `Target Context Window` (e.g., 28,000 tokens).
-6.  **Serving**: Resulting text files are zipped and offered for download.
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant B as Browser (FSA API)
-    participant W as WebWorker (TikToken)
-    participant D as Disk (Local)
-
-    U->>B: Select Input Folder
-    B->>D: Request Read Permission
-    D-->>B: Permission Granted
-    
-    loop Recursively Scan
-        B->>D: Read File
-        D-->>B: Content
-    end
-
-    B->>W: Send Content for Tokenizing
-    W-->>B: Return Chunks + Stats
-    
-    B->>D: Write "Cooked" Files (Zip/Folder)
-    B->>U: Show "Cooking Complete"
-```
-</details>
-
----
-
-## 🧪 Testing & CI/CD
-
-We maintain a rigorous standard of code quality.
-
-*   **Linting**: Strict `flake8` implementation for Python.
-*   **Testing**: `pytest` suite covers the core chunking logic to ensure no data loss.
-*   **CI**: GitHub Actions run on every push to `main`.
-
-Run tests locally:
-```bash
-python -m pytest tests/
-```
-
----
-
-## 🤝 Contributing
-
-We welcome Pull Requests! Please see the [Issues](https://github.com/DropShock-Digital/LMTokenCook/issues) tab for "Good First Issues".
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## 📜 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-<div align="center">
-  <strong>Built with 🧡 by DropShock Digital</strong><br>
-  <em>Professional AI Solutions</em>
-</div>
+This README follows the DropShock repo documentation format: one clear identity, one visual map, a short operator path, explicit ownership, and deeper detail moved into linked docs when needed. If the repo grows, add or update `docs/ARCHITECTURE.md`, `docs/DEPLOYMENT.md`, and `docs/OPERATIONS.md` instead of turning the README into a wall of text.
