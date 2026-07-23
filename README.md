@@ -1,88 +1,100 @@
-# LMTokenCook
+<p align="center">
+  <img src="assets/LMTC_Patch.png" alt="LMTokenCook" width="220">
+</p>
 
-![Repo type](https://img.shields.io/badge/type-profile%20organization%20hub-0f172a) ![Status](https://img.shields.io/badge/status-prototype-2563eb) ![Docs](https://img.shields.io/badge/docs-rich%20README-7c3aed) ![Visibility](https://img.shields.io/badge/visibility-public-16a34a)
+<h1 align="center">LMTokenCook</h1>
 
-Parse Your Files to Bypass Prompt Window Limits.
+<p align="center"><strong>Turn large folders of text and code into clean, token-sized context for AI tools.</strong></p>
 
-Built and maintained by **DropShock Digital**.
+<p align="center">
+  <a href="https://github.com/DropShock-Digital/LMTokenCook/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/DropShock-Digital/LMTokenCook/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-f59e0b"></a>
+  <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white">
+</p>
 
----
+LMTokenCook reads a project or document folder, counts tokens, builds a file map, and writes manageable text chunks that are easier to feed into conversational AI tools in order.
 
-## First screen
+**Try the browser app:** <https://lmtokencook.dropshockdigital.com>
 
-| Area | Detail |
-| --- | --- |
-| Repository | [`DropShock-Digital/LMTokenCook`](https://github.com/DropShock-Digital/LMTokenCook) |
-| Primary class | profile / organization hub |
-| Current posture | prototype |
-| Default branch | `main` |
-| Visibility | public |
-| Last README standardization | 2026-06-26 |
+![LMTokenCook application](src/ui/public/app_hero_screenshot.png)
 
-## What matters
+## Why it exists
 
-- Make the repo purpose obvious in the first 30 seconds.
-- Put the architecture or workflow in a visual map before deep prose.
-- Keep commands, environment notes, and handoff risks close to the top.
-- Credit the real builder/maintainer while keeping client or project context separate from implementation notes.
-- Audit priority: `P2`
+Copying a large project into an AI chat is unreliable: uploads may be rejected, content can be split in the wrong places, and the model may answer before receiving the full context. LMTokenCook makes that handoff predictable without pretending to expand a model's actual context window.
 
-## System map
+## What it does
 
-```mermaid
-flowchart TD
-    A["New repo / operator"] --> B["Template or hub"]
-    B --> C["Reusable standards"]
-    C --> D["Project-specific implementation"]
-    D --> E["Consistent handoff"]
-    B --> F["Examples + adoption notes"]
+- Reads nested folders of text and source files.
+- Skips common build output, hidden folders, and binary image/executable files.
+- Counts tokens with `cl100k_base` tokenization.
+- Splits content on line boundaries at a configurable token limit.
+- Generates an optional project structure and token map.
+- Adds optional ordered context headers so a chat can wait for all parts.
+- Writes directly to an output folder in supported browsers or downloads a ZIP fallback.
+
+## Privacy model
+
+The primary React workflow processes selected files **inside your browser**. The chosen folder is not uploaded by that workflow. Your browser still needs explicit permission to read the input and, where supported, write the output.
+
+Treat generated chunks as copies of the source material: review them before sharing, and do not send private code, credentials, client data, or regulated information to an AI service unless that use is authorized.
+
+## Run locally
+
+```bash
+git clone https://github.com/DropShock-Digital/LMTokenCook.git
+cd LMTokenCook/src/ui
+npm ci
+npm run dev
 ```
 
+Open the local URL printed by Vite. Chromium-family browsers provide the fullest folder read/write experience; other browsers use the ZIP download fallback.
 
-### Visual proof
+## Verify a change
 
-![Lmtc Logo](assets/LMTC_Logo.png)
+### Frontend
 
-![Lmtc Patch](assets/LMTC_Patch.png)
+```bash
+cd src/ui
+npm ci
+npm run build
+```
 
-![Architecture](assets/architecture.png)
-
-## Best features carried forward
-
-- Visual-first GitHub Markdown is kept, but constrained to one clear hero/asset lane.
-- Existing Mermaid thinking is preserved and moved near the top as the system map.
-- Existing setup intent is kept and reframed as a short operator path.
-- Architecture language is retained but converted into a skimmable diagram-first explanation.
-- Icon-rich scanning is retained where it helps readers move faster.
-
-## Operate this repo
-
-**Detected stack:** Python project metadata, Dockerfile, Docker Compose
+### Python compatibility path
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-docker build -t local-app .
-docker compose up --build
+pip install -r src/server/requirements.txt
+PYTHONPATH=. python -m pytest tests/
 ```
 
-> Commands above are inferred from repository files and should be verified before they become release or client handoff instructions.
+The Python server is retained for compatibility and experiments; the browser-native React workflow is the primary product path.
 
-## Documentation map
+## Repository map
 
-- [`LICENSE`](LICENSE)
-- [`docker-compose.yml`](docker-compose.yml)
-
-## Handoff notes
-
-| Area | Detail |
+| Path | Purpose |
 | --- | --- |
-| Secrets | No `.env.example` was detected; add one before documenting environment-specific setup. |
-| License | License file detected. |
-| Owner credit | Built and maintained by DropShock Digital. |
-| Next documentation move | Add `docs/ARCHITECTURE.md` with the full system diagram and decisions. |
+| `src/ui/` | Browser-native React application |
+| `src/ui/src/lib/chunker.ts` | Token counting and line-aware chunking |
+| `src/ui/src/lib/fs-handler.ts` | Permissioned local folder access |
+| `src/server/` | Optional Python compatibility/API path |
+| `tests/` | Python regression tests |
+| `assets/` | Brand and architecture artwork |
 
-## Maintenance standard
+## Limitations
 
-This README follows the DropShock repo documentation format: one clear identity, one visual map, a short operator path, explicit ownership, and deeper detail moved into linked docs when needed. If the repo grows, add or update `docs/ARCHITECTURE.md`, `docs/DEPLOYMENT.md`, and `docs/OPERATIONS.md` instead of turning the README into a wall of text.
+- LMTokenCook does not increase an AI model's context window.
+- Token presets for third-party products are estimates and may change.
+- Binary formats such as images, executables, and arbitrary office documents are not parsed by the browser workflow.
+- You are responsible for reviewing output order, completeness, confidentiality, and suitability for the target model.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Please report security concerns through [SECURITY.md](SECURITY.md), not in a public issue.
+
+## License
+
+LMTokenCook is available under the [MIT License](LICENSE).
+
+Built by [DropShock Digital](https://dropshockdigital.com) and Steven Seagondollar.

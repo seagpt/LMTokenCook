@@ -1,35 +1,43 @@
-# Dependency directories
+# Dependencies and build output
 node_modules/
 dist/
 build/
 venv/
+venv_*/
 .venv/
-.venv_mac/
 __pycache__/
 *.py[cod]
+*.egg-info/
+*.tsbuildinfo
+src/ui/vite.config.js
+src/ui/vite.config.d.ts
 
-# Generated logs / local test output
+# Generated logs, local output, and runtime state
 *.log
 *_output.txt
 *_utf8.log
+*.db
+*.sqlite
+*.sqlite3
 
-# Environment / Secrets
+# Environment and secrets
 .env
 .env.*
 !.env.example
 
-# --- STRICT PRIVACY POLICY ---
-# Exclude all markdown files globally except the main README
-*.md
-!README.md
-
-# Explicitly block AI Context directories
-docs/ai_context/
+# Private AI context
+.ai/
+.ai_context/
 ai_context/
+docs/ai_context/
 
-# Assets & Archives
+# Generated packages and vendored executables
 *.zip
 *.tar.gz
+*.exe
+*.dmg
+
+# Local archives
 archive/
 _archive/
 _Legacy*/
