@@ -2,6 +2,10 @@
 
 > **Review copy only.** This file is a proposed replacement for `README.md`. It does not change the live project README.
 
+![Generated LMTokenCook banner concept](assets/readme/lmtokencook-readme-banner-concept.png)
+
+> **Visual concept:** This original AI-generated banner and abstract packet mark are review-only design concepts. They do not replace LMTokenCook’s existing official logo or represent product UI.
+
 **Turn a folder of text and code into smaller, ordered context files for an AI conversation.**
 
 LMTokenCook helps when a project is too large to paste into one chat message. It reads selected files, counts tokens, creates a file map, and writes chunks in order so you can share the full picture step by step.
