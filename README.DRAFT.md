@@ -1,39 +1,42 @@
-# LMTokenCook — README draft
+# LMTokenCook
 
-> **Review copy only.** This file is a proposed replacement for `README.md`. It does not change the live project README.
+<p align="center">
+  <img src="assets/LMTC_Patch.png" alt="Official LMTokenCook patch: a cooking pan with token blocks." width="260">
+</p>
 
-![Generated LMTokenCook banner concept](assets/readme/lmtokencook-readme-banner-concept.png)
+<p align="center"><strong>Turn a large folder of text and code into smaller, ordered context files an AI conversation can actually receive.</strong></p>
 
-> **Visual concept:** This original AI-generated banner and abstract packet mark are review-only design concepts. They do not replace LMTokenCook’s existing official logo or represent product UI.
+> **Review copy only.** This proposed replacement is on `docs/readme-draft`. It does not change the main README, the live browser app, or LMTokenCook’s official product artwork.
 
-**Turn a folder of text and code into smaller, ordered context files for an AI conversation.**
+When a project will not fit into one message, the usual choices are bad: paste a partial view, lose file order, or manually split files for hours. LMTokenCook makes that handoff deliberate. It reads the files you choose, counts tokens, creates an optional map, then writes line-aware chunks in order.
 
-LMTokenCook helps when a project is too large to paste into one chat message. It reads selected files, counts tokens, creates a file map, and writes chunks in order so you can share the full picture step by step.
+**Worth trying if:** you need to give an AI tool a large codebase or document set without losing the structure that makes the files understandable.
 
-**Status:** Active public project. The main product is the browser app. The Python service remains a compatibility and experimental path.
+<p align="center">
+  <img src="src/ui/public/app_hero_screenshot.png" alt="LMTokenCook's real browser interface with local folder selection, token controls, and Local Cook action." width="100%">
+</p>
 
-- **Use the app:** <https://lmtokencook.dropshockdigital.com/>
-- **Source code:** <https://github.com/DropShock-Digital/LMTokenCook>
+The screenshot is a real browser-interface capture with no selected source files or private project data.
 
-![LMTokenCook browser app](src/ui/public/app_hero_screenshot.png)
+## How the browser workflow stays local
 
-## What it does
+```mermaid
+flowchart LR
+  A[Choose input folder] --> B[Browser reads eligible files]
+  B --> C[Count tokens and split on line boundaries]
+  C --> D{File System Access API available?}
+  D -- Yes --> E[Write ordered chunks to chosen output folder]
+  D -- No --> F[Create local ZIP download]
+```
 
-1. You choose a folder of text or source files.
-2. LMTokenCook reads eligible files and counts them with `cl100k_base` tokenization.
-3. It can create a project map showing each file and its token count.
-4. It splits each file on line boundaries at your chosen limit.
-5. It writes numbered context files with optional “wait for the next part” instructions.
+The primary browser app uses browser folder permissions and local ZIP generation; selected folders are not uploaded as part of that workflow. The output is still a copy of your source material, so review it before sharing with any AI service.
 
-In browsers with the File System Access API, you choose both the input and output folders. Other supported browsers fall back to a ZIP download.
+## Use it now
 
-## Privacy and care
+- **Browser app:** https://lmtokencook.dropshockdigital.com/
+- **Source:** https://github.com/DropShock-Digital/LMTokenCook
 
-The primary browser workflow processes selected files in your browser. It does not upload the chosen folder as part of that workflow.
-
-The output is still a copy of your source material. Review it before you share it. Do not send private code, credentials, client files, personal data, or regulated information to an AI service unless you are allowed to do so.
-
-## Use it locally
+### Run the browser app locally
 
 ```bash
 git clone https://github.com/DropShock-Digital/LMTokenCook.git
@@ -42,11 +45,9 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. Chromium-family browsers provide the full folder read/write path. Other browsers use the ZIP fallback.
+Open the local URL printed by Vite. Chromium-family browsers provide the full input/output folder path. Other supported browsers use the local ZIP fallback.
 
-## Check a change
-
-### Browser app
+### Check a change
 
 ```bash
 cd src/ui
@@ -54,38 +55,38 @@ npm ci
 npm run build
 ```
 
-### Python compatibility path
+The Python service is a compatibility and experimental path. Its requirements and tests live under `src/server/` and `tests/`.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r src/server/requirements.txt
-PYTHONPATH=. python -m pytest tests/
-```
+## What it does—and does not do
 
-## What it does not do
+| It helps with | It does not do |
+| --- | --- |
+| Ordered, line-aware context chunks | Increase an AI model’s context window |
+| Token counts and an optional project map | Decide whether source material is safe to share |
+| Folder output when supported, ZIP fallback otherwise | Parse every binary or office-file format in the browser path |
+| A local-first browser workflow | Guarantee a third-party AI service accepts a chosen token count |
 
-- It does not increase an AI model’s context window.
-- It does not decide whether your files are safe to share.
-- It does not parse every binary or office-file format in the browser workflow.
-- It does not guarantee that a third-party chat product will accept a particular token count.
+## Keep source material under control
+
+- Select only folders you are allowed to share.
+- Review generated chunks before sending them anywhere.
+- Do not send credentials, client files, personal data, or regulated material to an AI service without authorization.
+- Treat the Python compatibility/API path separately from the local-first browser flow when evaluating privacy and deployment risk.
 
 ## Project map
 
-| Path | Purpose |
+| Path | Role |
 | --- | --- |
 | `src/ui/` | Browser-native React app |
 | `src/ui/src/lib/chunker.ts` | Token counting and line-aware chunking |
 | `src/ui/src/lib/fs-handler.ts` | Permissioned folder access and output writing |
 | `src/server/` | Python compatibility and API experiment path |
 | `tests/` | Python regression tests |
-| `assets/` | Product artwork and diagrams |
+| `assets/` | Official product artwork and diagrams |
 
-## Contributing and security
+## Contributing, security, and license
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. For a security issue, use GitHub’s private vulnerability-reporting option; do not post source material, credentials, generated chunks, or proof data in a public issue. See [SECURITY.md](SECURITY.md).
-
-## License
 
 LMTokenCook is available under the [MIT License](LICENSE).
 
